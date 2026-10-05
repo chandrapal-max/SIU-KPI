@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SIU KPI Accountability Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F5FB; --surface:#FFFFFF; --surface2:#F8FAFD; --tint:#EEF3FC; --line:#E2E8F3; --line2:#CFD9EA;
+  --ink:#0B1B33; --ink2:#2E4263; --muted:#62718A;
+  --blue:#1D4ED8; --blue2:#2563EB; --sky:#3B82F6;
+  --hero:linear-gradient(120deg,#0A2350 0%,#123C8C 48%,#1D5BE0 100%);
+  --side:linear-gradient(180deg,#0A2350 0%,#0D2D66 100%);
+  --btn:linear-gradient(180deg,#2B6BF3 0%,#1D4ED8 100%);
+  --g:#16A34A; --a:#D97706; --r:#DC2626; --p:#94A3B8;
+  --c1:#1D4ED8; --c2:#0EA5E9; --c3:#6366F1; --c4:#14B8A6; --c5:#8B5CF6; --c6:#F59E0B; --c7:#64748B;
+  --shadow:0 1px 2px rgba(15,35,80,.05),0 6px 20px rgba(15,35,80,.06);
+  --shadow-lg:0 24px 60px rgba(10,35,80,.22);
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070E1B; --surface:#0F1A2E; --surface2:#0C1626; --tint:#16243F; --line:#21324F; --line2:#2E4469;
+    --ink:#F3F6FC; --ink2:#D3DDEE; --muted:#A3B3CE;
+    --blue:#6AA8FF; --blue2:#3B82F6; --sky:#93C5FD;
+    --hero:linear-gradient(120deg,#0A1A3A 0%,#16357A 50%,#2257D6 100%);
+    --side:linear-gradient(180deg,#060D1A 0%,#0A1730 100%);
+    --btn:linear-gradient(180deg,#3B82F6 0%,#2563EB 100%);
+    --g:#34D399; --a:#FBBF24; --r:#F87171; --p:#A0AEC4;
+    --c1:#6AA8FF; --c2:#38BDF8; --c3:#A5B4FC; --c4:#2DD4BF; --c5:#C4B5FD; --c6:#FBBF24; --c7:#A0AEC4;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070E1B; --surface:#0F1A2E; --surface2:#0C1626; --tint:#16243F; --line:#21324F; --line2:#2E4469;
+  --ink:#F3F6FC; --ink2:#D3DDEE; --muted:#A3B3CE;
+  --blue:#6AA8FF; --blue2:#3B82F6; --sky:#93C5FD;
+  --hero:linear-gradient(120deg,#0A1A3A 0%,#16357A 50%,#2257D6 100%);
+  --side:linear-gradient(180deg,#060D1A 0%,#0A1730 100%);
+  --btn:linear-gradient(180deg,#3B82F6 0%,#2563EB 100%);
+  --g:#34D399; --a:#FBBF24; --r:#F87171; --p:#A0AEC4;
+  --c1:#6AA8FF; --c2:#38BDF8; --c3:#A5B4FC; --c4:#2DD4BF; --c5:#C4B5FD; --c6:#FBBF24; --c7:#A0AEC4;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.25);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--sky);outline-offset:2px;border-radius:6px}
+svg text{font-family:inherit}
+
+/* Motion */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes arcIn{from{stroke-dasharray:0 var(--c)}}
+@keyframes gaugeIn{from{stroke-dasharray:0 100}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes dash{to{stroke-dashoffset:0}}
+@keyframes fade{from{opacity:0}}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
+.noanim *{animation:none!important}
+.wrap{animation:fadeUp .4s cubic-bezier(.2,.8,.2,1) both}
+.arc{animation:arcIn 1.1s cubic-bezier(.2,.8,.2,1) both}
+.gv{animation:gaugeIn 1.3s cubic-bezier(.2,.8,.2,1) both}
+.grow{transform-origin:left center;animation:grow 1s cubic-bezier(.2,.8,.2,1) both}
+.rise{transform-box:fill-box;transform-origin:bottom;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+.slice{transform-box:view-box;animation:pop .7s cubic-bezier(.2,.8,.2,1) both;transition:transform .2s}
+.slice:hover{transform:scale(1.04)}
+.line{stroke-dasharray:1;stroke-dashoffset:1;animation:dash 1.4s cubic-bezier(.2,.8,.2,1) forwards}
+.fadein{animation:fade 1s .3s both}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.line{stroke-dashoffset:0}}
+
+#shell{height:100%;container-type:inline-size;container-name:shell;position:relative;overflow:hidden;background:var(--bg)}
+body.phone{background:radial-gradient(circle at 30% 20%,#DCE7FA,#B9CCEE);overflow:auto}
+:root[data-theme="dark"] body.phone{background:radial-gradient(circle at 30% 20%,#13254A,#050B16)}
+body.phone #shell{width:392px;height:min(830px,calc(100% - 32px));margin:16px auto;border:11px solid #0A1A3A;border-radius:38px;box-shadow:var(--shadow-lg)}
+#app{display:grid;grid-template-columns:252px 1fr;height:100%}
+
+/* Sidebar */
+.side{background:var(--side);color:#fff;display:flex;flex-direction:column;min-height:0;z-index:30;border-right:1px solid rgba(255,255,255,.06)}
+.brand{display:flex;gap:11px;align-items:center;padding:20px 18px 16px}
+.mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#3B82F6,#60A5FA);display:grid;place-items:center;flex:none;box-shadow:0 6px 16px rgba(59,130,246,.45)}
+.brand b{display:block;font-size:14.5px;line-height:1.2;letter-spacing:-.01em}
+.brand span{display:block;font-size:12px;color:#A9BCDD}
+.nav{flex:1;overflow:auto;padding:4px 12px 12px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
+.nav h6{margin:18px 10px 6px;font-size:11.5px;font-weight:600;color:#8FA6CC;letter-spacing:.02em}
+.nav button{position:relative;display:flex;align-items:center;gap:11px;width:100%;border:0;background:none;color:#DCE6F7;padding:9px 11px;border-radius:10px;cursor:pointer;text-align:left;font-size:13.5px;font-weight:500;transition:background .15s,color .15s}
+.nav button svg{width:18px;height:18px;flex:none;opacity:.8}
+.nav button:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav button.on{background:linear-gradient(90deg,rgba(96,165,250,.28),rgba(96,165,250,.08));color:#fff;font-weight:650}
+.nav button.on::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:#60A5FA}
+.nav button.on svg{opacity:1;color:#93C5FD}
+.nav .count{margin-left:auto;background:rgba(255,255,255,.14);border-radius:999px;padding:0 8px;font-size:11.5px;font-weight:700;color:#fff}
+.nav .count.hot{background:#EF4444}
+.side-foot{padding:14px;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:10px;align-items:center}
+.side-foot .who{flex:1;min-width:0}
+.side-foot .who b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side-foot .who span{display:block;font-size:11.5px;color:#A9BCDD;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#DBEAFE,#BFDBFE);color:#0A2350;display:grid;place-items:center;font-weight:800;font-size:12px;flex:none}
+.iconbtn{border:0;background:none;color:inherit;cursor:pointer;padding:7px;border-radius:9px;display:grid;place-items:center;transition:background .15s}
+.iconbtn svg{width:18px;height:18px}
+.iconbtn:hover{background:rgba(127,160,210,.16)}
+
+/* Topbar */
+.main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.top{display:flex;align-items:center;gap:10px;padding:10px 24px;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);flex:none;position:relative;z-index:20}
+.top .menu{display:none}
+.crumbs{min-width:0;color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumbs b{color:var(--ink);font-weight:650}
+.search{position:relative;flex:1;max-width:420px;margin-left:auto}
+.search input{width:100%;border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:8px 12px 8px 36px;font-size:13px;transition:border-color .15s,box-shadow .15s}
+.search input:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px color-mix(in srgb,var(--sky) 22%,transparent)}
+.search>svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
+.search kbd{position:absolute;right:9px;top:50%;transform:translateY(-50%);font:600 11px/1 inherit;color:var(--muted);border:1px solid var(--line2);border-radius:5px;padding:3px 5px;background:var(--surface)}
+.results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg);overflow:hidden;display:none;max-height:360px;overflow-y:auto}
+.results.on{display:block}
+.results button{display:flex;gap:10px;align-items:center;width:100%;border:0;background:none;padding:10px 14px;text-align:left;cursor:pointer;border-bottom:1px solid var(--line)}
+.results button:hover,.results button.sel{background:var(--tint)}
+.results small{color:var(--muted);margin-left:auto;white-space:nowrap}
+.tool{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 11px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink2);transition:border-color .15s}
+.tool:hover{border-color:var(--sky)}
+.tool svg{width:16px;height:16px}
+.tool.on{background:var(--tint);border-color:var(--blue);color:var(--blue)}
+.yearpick{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 10px;font-size:13px;font-weight:600;color:var(--ink2)}
+.bell{position:relative}
+.bell .dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:#EF4444;box-shadow:0 0 0 2px var(--surface)}
+.content{flex:1;overflow:auto;padding:24px 28px 64px;scroll-behavior:smooth}
+.wrap{max-width:1240px;margin:0 auto}
+
+/* Type */
+h1{font-size:26px;line-height:1.2;margin:0;font-weight:800;letter-spacing:-.02em}
+h2{font-size:16px;margin:0;font-weight:700;letter-spacing:-.01em}
+h3{font-size:14.5px;margin:0;font-weight:700}
+.sub{color:var(--muted);margin:5px 0 0}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+.ph{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;margin-bottom:20px}
+.ph .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.back{display:inline-flex;gap:6px;align-items:center;font-size:12.5px;font-weight:600;margin-bottom:8px;cursor:pointer}
+.back svg{width:14px;height:14px}
+
+/* Hero band */
+.hero{position:relative;overflow:hidden;background:var(--hero);color:#fff;border-radius:20px;padding:26px 28px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;box-shadow:0 18px 40px rgba(18,60,140,.25)}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);background-size:18px 18px;mask-image:linear-gradient(90deg,transparent,#000 70%);pointer-events:none}
+.hero::after{content:"";position:absolute;right:-120px;top:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(147,197,253,.35),transparent 65%);pointer-events:none}
+.hero>*{position:relative;z-index:1}
+.hero h1{color:#fff;font-size:28px}
+.hero .sub{color:#C4D5F2}
+.hero .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.hchip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600;color:#fff;backdrop-filter:blur(6px)}
+.hchip i{width:8px;height:8px;border-radius:50%}
+.hero .btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#fff}
+.hero .btn:hover{background:rgba(255,255,255,.2)}
+.overlap{margin-top:-34px;padding:0 18px;position:relative;z-index:2}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;border:1px solid var(--line2);background:var(--surface);padding:8px 14px;cursor:pointer;font-weight:650;font-size:13.5px;color:var(--ink);transition:transform .12s,box-shadow .15s,border-color .15s,background .15s;white-space:nowrap}
+.btn svg{width:16px;height:16px}
+.btn:hover{border-color:var(--sky);box-shadow:var(--shadow)}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:var(--btn);border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.35)}
+.btn.pri:hover{filter:brightness(1.07)}
+.btn.warn{color:var(--r);border-color:color-mix(in srgb,var(--r) 45%,transparent)}
+.btn.ghost{border-color:transparent;background:none;color:var(--blue);box-shadow:none}
+.btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none;filter:none}
+.btn.sm{padding:5px 10px;font-size:12.5px;border-radius:8px}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow);min-width:0}
+.card-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.card-h p{margin:3px 0 0;color:var(--muted);font-size:12.5px}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g21{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.g12{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}
+.span2{grid-column:span 2}
+.mt{margin-top:18px}
+.stack>*+*{margin-top:18px}
+
+/* Stat cards */
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;min-width:0;position:relative;overflow:hidden}
+.stat .top-row{display:flex;justify-content:space-between;align-items:center}
+.stat .lbl{color:var(--muted);font-size:12.5px;font-weight:600}
+.stat .ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--k,var(--blue)) 14%,transparent);color:var(--k,var(--blue))}
+.stat .ico svg{width:18px;height:18px}
+.stat .val{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.stat .val small{font-size:14px;color:var(--muted);font-weight:600}
+.stat .foot{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.delta{display:inline-flex;align-items:center;gap:3px;font-weight:700;font-size:12px;border-radius:999px;padding:1px 8px}
+.delta.up{color:var(--g);background:color-mix(in srgb,var(--g) 14%,transparent)}
+.delta.down{color:var(--r);background:color-mix(in srgb,var(--r) 14%,transparent)}
+.spark{position:absolute;right:14px;bottom:12px;opacity:.9}
+
+/* Chips */
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;white-space:nowrap;color:var(--k);background:color-mix(in srgb,var(--k) 14%,transparent);border:1px solid color-mix(in srgb,var(--k) 22%,transparent)}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.chip.noDot::before{display:none}
+.chip svg{width:12px;height:12px}
+.k-g{--k:var(--g)} .k-a{--k:var(--a)} .k-r{--k:var(--r)} .k-p{--k:var(--p)} .k-b{--k:var(--blue)}
+.tag{display:inline-block;border:1px solid var(--line2);border-radius:7px;padding:2px 8px;font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+
+/* Tables */
+.tw{overflow-x:auto;margin:0 -6px;padding:0 6px}
+table{width:100%;border-collapse:separate;border-spacing:0;min-width:680px}
+th{text-align:left;font-size:12px;font-weight:700;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface2);position:sticky;top:0}
+th:first-child{border-top-left-radius:10px} th:last-child{border-top-right-radius:10px}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.click{cursor:pointer;transition:background .12s}
+tbody tr.click:hover td{background:var(--tint)}
+td.num,th.num{text-align:right}
+.kid{font-weight:700;color:var(--blue);white-space:nowrap}
+.mini{display:inline-block;width:64px;height:6px;border-radius:999px;background:var(--tint);overflow:hidden;vertical-align:middle;margin-right:8px}
+.mini i{display:block;height:100%;border-radius:999px}
+
+/* Charts */
+.donut-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.donut-wrap svg{flex:none}
+.legend{display:flex;flex-direction:column;gap:9px;flex:1;min-width:150px}
+.legend div{display:grid;grid-template-columns:12px 1fr auto auto;gap:9px;align-items:center;font-size:13px}
+.legend i{width:12px;height:12px;border-radius:4px}
+.legend b{font-weight:700}
+.legend span.pc{color:var(--muted);font-size:12px;min-width:38px;text-align:right}
+.hbars{display:flex;flex-direction:column;gap:14px}
+.hb{display:grid;grid-template-columns:minmax(120px,1.1fr) 2fr 70px;gap:14px;align-items:center;cursor:pointer}
+.hb .nm{font-size:13px;font-weight:600;line-height:1.3}
+.hb .nm small{display:block;color:var(--muted);font-weight:500;font-size:11.5px}
+.hb .tr{position:relative;height:12px;border-radius:999px;background:var(--tint)}
+.hb .tr i{position:absolute;inset:0 auto 0 0;border-radius:999px;background:linear-gradient(90deg,color-mix(in srgb,var(--k) 60%,transparent),var(--k))}
+.hb .tr u{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink2);border-radius:2px;opacity:.55}
+.hb .vl{text-align:right;font-weight:800;font-size:13.5px}
+.hb:hover .tr{box-shadow:0 0 0 3px color-mix(in srgb,var(--k) 18%,transparent)}
+.ribbon{display:flex;gap:4px;height:40px}
+.seg{position:relative;background:var(--tint);border-radius:8px;overflow:hidden;cursor:pointer;min-width:20px;transition:transform .15s}
+.seg:hover{transform:translateY(-2px)}
+.seg .fill{position:absolute;left:0;bottom:0;right:0;background:linear-gradient(180deg,color-mix(in srgb,var(--k) 70%,#fff),var(--k));transform-origin:bottom;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+.seg span{position:absolute;left:5px;top:3px;font-size:10.5px;font-weight:800;color:var(--ink);z-index:1;mix-blend-mode:normal}
+.ribbon-l{display:flex;gap:4px;margin-top:5px}
+.ribbon-l div{font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden}
+.heat{display:flex;flex-direction:column;gap:8px}
+.heat .row{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center}
+.heat .row>b{font-size:12px;color:var(--muted)}
+.tiles{display:flex;flex-wrap:wrap;gap:5px}
+.tile{width:42px;height:34px;border-radius:8px;display:grid;place-items:center;font-size:10.5px;font-weight:800;cursor:pointer;color:var(--ink);transition:transform .15s,box-shadow .15s;animation:pop .5s cubic-bezier(.2,.8,.2,1) both}
+.tile:hover{transform:scale(1.12);box-shadow:var(--shadow);z-index:2}
+.tile.pend{background:repeating-linear-gradient(45deg,var(--tint),var(--tint) 4px,var(--surface) 4px,var(--surface) 8px);border:1px dashed var(--line2);color:var(--muted)}
+.scale{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:12px}
+.scale span{display:inline-flex;gap:6px;align-items:center}
+.scale i{width:12px;height:12px;border-radius:4px}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+
+/* Forms */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-weight:650;font-size:13px}
+.field .hint{font-size:12px;color:var(--muted)}
+.input,select.input,textarea.input{border:1px solid var(--line2);border-radius:10px;padding:9px 12px;background:var(--surface);width:100%;transition:border-color .15s,box-shadow .15s}
+.input:focus{border-color:var(--sky);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--sky) 22%,transparent)}
+textarea.input{min-height:86px;resize:vertical}
+.err{color:var(--r);font-size:12.5px;font-weight:650;min-height:1px}
+.drop{border:1.5px dashed color-mix(in srgb,var(--blue) 55%,transparent);border-radius:12px;padding:20px;text-align:center;background:color-mix(in srgb,var(--blue) 6%,transparent);cursor:pointer;color:var(--blue);font-weight:650;transition:background .15s}
+.drop:hover{background:color-mix(in srgb,var(--blue) 11%,transparent)}
+.drop svg{vertical-align:-4px;margin-right:6px}
+.file{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-top:8px;background:var(--surface2);animation:fadeUp .3s both}
+.file .fi{width:32px;height:32px;border-radius:8px;background:color-mix(in srgb,var(--r) 14%,transparent);color:var(--r);display:grid;place-items:center;font-size:10px;font-weight:800;flex:none}
+.file .meta{flex:1;min-width:0}
+.file .meta b{display:block;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file .meta span{font-size:11.5px;color:var(--muted)}
+.calc{background:var(--hero);color:#fff;border-radius:18px;padding:20px 22px;position:relative;overflow:hidden;box-shadow:0 18px 40px rgba(18,60,140,.25)}
+.calc::after{content:"";position:absolute;right:-80px;top:-80px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(147,197,253,.3),transparent 70%)}
+.calc .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.13);position:relative;z-index:1}
+.calc .row:last-child{border:0}
+.calc .row span{color:#C4D5F2}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:10px 14px;cursor:pointer;color:var(--muted);font-weight:650;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--blue);border-bottom-color:var(--blue)}
+.seg-ctl{display:inline-flex;background:var(--tint);border-radius:10px;padding:3px;gap:2px}
+.seg-ctl button{border:0;background:none;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12.5px;font-weight:650;color:var(--muted)}
+.seg-ctl button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pill{border:1px solid var(--line2);background:var(--surface);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:12.5px;font-weight:650;color:var(--muted);transition:all .15s}
+.pill:hover{border-color:var(--sky);color:var(--ink)}
+.pill.on{background:var(--btn);border-color:transparent;color:#fff}
+.banner{display:flex;gap:11px;align-items:flex-start;border-radius:12px;padding:12px 14px;margin-bottom:18px;color:var(--ink);border:1px solid color-mix(in srgb,var(--k) 30%,transparent);background:color-mix(in srgb,var(--k) 9%,var(--surface))}
+.banner svg{width:18px;height:18px;flex:none;color:var(--k);margin-top:2px}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{position:relative;padding:0 0 18px 26px}
+.tl li::before{content:"";position:absolute;left:4px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:3px solid var(--k,var(--blue))}
+.tl li::after{content:"";position:absolute;left:9px;top:20px;bottom:0;width:2px;background:var(--line)}
+.tl li:last-child::after{display:none}
+.tl b{display:block;font-size:13px}
+.tl span{font-size:12px;color:var(--muted)}
+.check{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+.check:last-child{border:0}
+.check input{margin-top:3px;width:16px;height:16px;accent-color:var(--blue2)}
+.ok{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:12px;font-weight:800;color:var(--k);background:color-mix(in srgb,var(--k) 16%,transparent)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:13.5px;margin:0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:600}
+.weightin{width:80px;text-align:right;font-weight:700}
+.prog{height:8px;border-radius:999px;background:var(--tint);overflow:hidden}
+.prog i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--sky),var(--blue))}
+
+/* Kanban */
+.board{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:14px;overflow-x:auto}
+.col{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:12px;min-height:200px}
+.col h3{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin:2px 4px 10px}
+.kc{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--k);border-radius:10px;padding:11px 12px;margin-bottom:9px;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s}
+.kc:hover{transform:translateY(-2px)}
+.kc b{display:block;font-size:13px;margin-bottom:3px}
+.kc .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px;color:var(--muted)}
+
+/* Flow guide */
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:9px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .15s,border-color .15s}
+.step:hover{transform:translateY(-3px);border-color:var(--sky)}
+.step .n{width:34px;height:34px;border-radius:11px;background:var(--btn);color:#fff;display:grid;place-items:center;font-weight:800;box-shadow:0 6px 14px rgba(37,99,235,.35)}
+.step p{margin:0;color:var(--muted);font-size:13px;flex:1}
+.step .who{font-size:12px;font-weight:700;color:var(--blue)}
+
+/* Login */
+.login{display:grid;grid-template-columns:1.1fr 1fr;height:100%;overflow:auto;background:var(--surface)}
+.login-l{position:relative;overflow:hidden;background:var(--hero);color:#fff;padding:44px 52px;display:flex;flex-direction:column;justify-content:space-between;gap:28px}
+.login-l::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(circle at 70% 40%,#000,transparent 75%)}
+.login-l::after{content:"";position:absolute;left:40%;top:30%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.35),transparent 60%)}
+.login-l>*{position:relative;z-index:1}
+.login-l h1{font-size:44px;line-height:1.06;color:#fff;max-width:14ch;letter-spacing:-.03em}
+.login-l p{color:#C4D5F2;max-width:46ch;font-size:15.5px}
+.glass{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:16px 18px;backdrop-filter:blur(12px);display:flex;gap:18px;align-items:center;max-width:470px;box-shadow:0 20px 50px rgba(0,0,0,.25);animation:fadeUp .8s .2s both}
+.glass .gl{flex:1;display:flex;flex-direction:column;gap:9px}
+.glass .gl div{display:flex;justify-content:space-between;font-size:12.5px;color:#DCE7F8}
+.login-r{padding:44px 56px;display:flex;flex-direction:column;justify-content:center;gap:18px;max-width:620px;width:100%;margin:0 auto}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rolecard{border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;background:var(--surface);cursor:pointer;display:flex;gap:11px;align-items:center;transition:all .15s}
+.rolecard:hover{border-color:var(--sky);background:var(--tint);transform:translateY(-1px)}
+.rolecard .rt b{display:block;font-size:13.5px}
+.rolecard .rt span{display:block;font-size:12px;color:var(--muted)}
+.rolecard.sel{border-color:var(--blue);background:var(--tint)}
+.sso{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;border-radius:12px;background:var(--btn);color:#fff;border:0;font-weight:700;cursor:pointer;font-size:15px;box-shadow:0 8px 22px rgba(37,99,235,.35);position:relative;overflow:hidden}
+.sso::after{content:"";position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:shimmer 3.2s 1s infinite}
+.sso svg{width:18px;height:18px}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* Overlays */
+.scrim{position:absolute;inset:0;background:rgba(5,15,35,.5);backdrop-filter:blur(3px);display:none;z-index:50;align-items:center;justify-content:center;padding:20px}
+.scrim.on{display:flex;animation:fade .2s both}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:18px;max-width:520px;width:100%;padding:24px;box-shadow:var(--shadow-lg);animation:fadeUp .25s both}
+.modal .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.drawer-scrim{position:absolute;inset:0;background:rgba(5,15,35,.5);z-index:25;display:none}
+.pop{position:absolute;top:58px;right:18px;width:360px;max-width:calc(100% - 36px);background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-lg);z-index:40;display:none;overflow:hidden}
+.pop.on{display:block;animation:fadeUp .2s both}
+.pop .ph2{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.pop .item{display:flex;gap:11px;padding:12px 16px;border-bottom:1px solid var(--line);cursor:pointer;align-items:flex-start}
+.pop .item:hover{background:var(--tint)}
+.pop .item:last-child{border:0}
+.pop .item b{display:block;font-size:13px}
+.pop .item span{font-size:12px;color:var(--muted)}
+.toast{position:absolute;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:#0A1A3A;color:#fff;padding:12px 18px 12px 14px;border-radius:12px;font-weight:650;opacity:0;transition:.3s cubic-bezier(.2,.8,.2,1);z-index:60;pointer-events:none;max-width:90%;display:flex;gap:10px;align-items:center;box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,.1)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast i{width:22px;height:22px;border-radius:50%;background:#22C55E;display:grid;place-items:center;font-style:normal;font-size:12px}
+#tip{position:fixed;z-index:100;pointer-events:none;background:#0A1A3A;color:#fff;font-size:12px;font-weight:600;padding:7px 10px;border-radius:8px;opacity:0;transition:opacity .12s;max-width:260px;box-shadow:0 8px 20px rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.1)}
+#tip.on{opacity:1}
+.ro{display:inline-flex;gap:6px;align-items:center;background:var(--tint);color:var(--blue);font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
+.empty{text-align:center;padding:36px 20px}
+.empty .ei{width:52px;height:52px;border-radius:16px;margin:0 auto 12px;display:grid;place-items:center;background:var(--tint);color:var(--blue)}
+
+/* Responsive via container */
+@container shell (max-width: 860px){
+  #app{grid-template-columns:1fr}
+  .side{position:absolute;inset:0 auto 0 0;width:276px;transform:translateX(-100%);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+  .side.open{transform:none}
+  .side.open ~ .drawer-scrim{display:block}
+  .top .menu{display:grid}
+  .top{padding:10px 14px}
+  .content{padding:16px 14px 70px}
+  .g2,.g3,.g21,.g12{grid-template-columns:minmax(0,1fr)}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .span2{grid-column:auto}
+  .flow{grid-template-columns:minmax(0,1fr)}
+  .login{grid-template-columns:1fr}
+  .login-l,.login-r{padding:28px 22px}
+  .login-l h1{font-size:32px}
+  .hero{grid-template-columns:1fr;padding:22px 20px}
+  .hero h1{font-size:23px}
+  .overlap{margin-top:-24px;padding:0 10px}
+  h1{font-size:22px}
+  .hide-n{display:none!important}
+  .roles{grid-template-columns:1fr}
+  .search kbd{display:none}
+  .stat .val{font-size:23px}
+  .hb{grid-template-columns:minmax(90px,1fr) 1.4fr 56px;gap:10px}
+  .crumbs{display:none}
+  .board{grid-template-columns:repeat(4,240px)}
+  .entry-grid>.stack{order:-1}
+}
+@container shell (max-width: 1140px) and (min-width: 861px){
+  .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3.collapse{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+<div id="shell"></div>
+<div id="tip" role="tooltip"></div>
+<script>
+/* ================= Icons ================= */
+const I = {
+  grid:'<path d="M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z"/>',
+  inst:'<path d="M3 10l9-6 9 6M5 10v9h14v-9M9 19v-5h6v5"/>',
+  list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
+  edit:'<path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/>',
+  check:'<path d="M9 11l3 3 8-8M20 12v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1h11"/>',
+  stamp:'<path d="M5 21h14M6 17h12l-1-4H7l-1 4zM10 13V9a2 2 0 114 0v4"/>',
+  alert:'<path d="M12 9v4M12 17h.01M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/>',
+  file:'<path d="M14 3H6a1 1 0 00-1 1v16a1 1 0 001 1h12a1 1 0 001-1V8l-5-5zM14 3v5h5M9 13h6M9 17h6"/>',
+  box:'<path d="M3 7h18v4H3zM5 11v9h14v-9M10 15h4"/>',
+  clock:'<path d="M12 7v5l3 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+  layers:'<path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/>',
+  sliders:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M14 4v4M8 10v4M16 16v4"/>',
+  pie:'<path d="M12 3v9h9A9 9 0 1112 3zM15 3.5A9 9 0 0120.5 9H15z"/>',
+  users:'<path d="M16 19v-1a4 4 0 00-4-4H7a4 4 0 00-4 4v1M9.5 10a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM21 19v-1a4 4 0 00-3-3.9M15 3.1a3.5 3.5 0 010 6.8"/>',
+  cal:'<path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"/>',
+  map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/>',
+  bell:'<path d="M6 9a6 6 0 1112 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 004 0"/>',
+  menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+  phone:'<path d="M7 3h10a1 1 0 011 1v16a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1zM11 18h2"/>',
+  out:'<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/>',
+  up:'<path d="M12 16V4M7 9l5-5 5 5M4 20h16"/>',
+  info:'<path d="M12 8h.01M11 12h1v5h1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+  down:'<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>',
+  lock:'<path d="M6 11h12v9H6zM8 11V8a4 4 0 118 0v3"/>',
+  sun:'<path d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6L4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 17a5 5 0 100-10 5 5 0 000 10z"/>',
+  moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  search:'<path d="M11 18a7 7 0 100-14 7 7 0 000 14zM20 20l-4-4"/>',
+  left:'<path d="M15 6l-6 6 6 6"/>',
+  target:'<path d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 16a4 4 0 100-8 4 4 0 000 8zM12 12h.01"/>',
+  trend:'<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>',
+  shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3zM9 12l2 2 4-4"/>',
+  hourglass:'<path d="M6 3h12M6 21h12M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/>'
+};
+const ic = (n,c='') => `<svg class="${c}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
+const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+let UID=0; const uid=()=>'u'+(++UID);
+const TODAY = new Date('2026-10-04T09:00:00');
+
+/* ================= Data ================= */
+const PEOPLE = {
+  'Campus Medical Officer In Charge':'Dr Meera Kulkarni','SMO, Preventive Care':'Dr Rohan Deshpande','Campus Medical Officers':'Dr Meera Kulkarni',
+  'Team Administration':'Sneha Patil','SMO, Promotive Care':'Dr Kavita Joshi','CWAC Coordinator / Nodal MO':'Dr Sameer Kale',
+  'SMO, Audit and Compliance':'Dr Arvind Rao','Team Health Care Services':'Priya Nair','Senior Officer / Admin Team':'Anil Gokhale',
+  'SMO, Academics':'Dr Neha Bhosale','SMO, Training':'Dr Vikram Shinde','Research Lead / Research Assistant':'Dr Aditi Rane',
+  'Assistant Admin Officer and Accountant':'Rahul Jadhav'
+};
+const PARAMS = [
+  {id:'P1',name:'Program Progress and Preventive Health',short:'Preventive health',w:40,c:'var(--c1)'},
+  {id:'P2',name:'Stakeholder Feedback and Service Quality',short:'Service quality',w:15,c:'var(--c2)'},
+  {id:'P3',name:'Teaching and Health Literacy',short:'Teaching',w:10,c:'var(--c3)'},
+  {id:'P4',name:'Capacity Building and Workforce Readiness',short:'Capacity building',w:10,c:'var(--c4)'},
+  {id:'P5',name:'Research and Academic Contribution',short:'Research',w:5,c:'var(--c5)'},
+  {id:'P6',name:'Financial Sustainability',short:'Finance',w:20,c:'var(--c6)'}
+];
+const RAW = [
+ ['P1.01','P1','AWC Coverage Rate','Campus Medical Officer In Charge',80,'%','H',3,null,'draft','No. screened ÷ eligible population × 100'],
+ ['P1.02','P1','AWC Screening Quality Completion','SMO, Preventive Care',90,'%','H',2,92,'approved','Completed comprehensive screenings ÷ total screenings × 100'],
+ ['P1.03','P1','AWC Operational Efficiency','SMO, Preventive Care',30,'min/person','L',2,34,'approved','Total workflow time ÷ No. screened'],
+ ['P1.04','P1','AWC Gender and Age Specific Screening','Campus Medical Officer In Charge',80,'%','H',1,71,'submitted','Eligible persons screened for risk profile ÷ eligible persons × 100',852,1200],
+ ['P1.05','P1','AWC Abnormality Follow up Compliance','Campus Medical Officers',80,'%','H',1,76,'returned','Abnormal cases followed up ÷ abnormal cases identified × 100',228,300],
+ ['P1.06','P1','AWC Referral Closure Rate','Campus Medical Officers',70,'%','H',1,48,'approved','Completed referrals ÷ total referrals × 100'],
+ ['P1.07','P1','Insurance Registration Coverage','Team Administration',100,'%','H',5,96,'approved','Registered beneficiaries ÷ eligible population × 100'],
+ ['P1.08','P1','SHEP Program Completion','SMO, Promotive Care',100,'%','H',2,100,'approved','Programs conducted ÷ planned programs × 100'],
+ ['P1.09','P1','SHEP Learner Feedback / Outcome','SMO, Promotive Care',80,'%','H',3,84,'approved','Participants with satisfactory feedback ÷ respondents × 100'],
+ ['P1.10','P1','CHEP Program Completion','SMO, Promotive Care',100,'%','H',2,83,'approved','Programs conducted ÷ planned programs × 100'],
+ ['P1.11','P1','CHEP Learner Feedback / Outcome','SMO, Promotive Care',80,'%','H',3,78,'approved','Participants with satisfactory feedback ÷ respondents × 100'],
+ ['P1.12','P1','Staff HEP Completion','SMO, Promotive Care',100,'%','H',2,75,'approved','Programs conducted ÷ planned programs × 100'],
+ ['P1.13','P1','Staff HEP Feedback / Outcome','SMO, Promotive Care',80,'%','H',3,81,'approved','Staff with satisfactory feedback ÷ respondents × 100'],
+ ['P1.14','P1','CWAC Meetings Conducted','CWAC Coordinator / Nodal MO',4,'No.','H',2,4,'approved','Meetings conducted ÷ planned meetings × 100'],
+ ['P1.15','P1','CWAC Issue Resolution Rate','CWAC Coordinator / Nodal MO',75,'%','H',6,58,'approved','Issues resolved ÷ issues raised × 100',58,100],
+ ['P1.16','P1','CWAC Resolution Turnaround Time','SMO, Audit and Compliance',30,'days','L',2,41,'submitted','Average days from issue raised to closure'],
+ ['P1.17','P1','Blood Donation Drive Participation','Team Health Care Services',80,'% of target','H',3,92,'approved','Actual donors ÷ target donors × 100'],
+ ['P1.18','P1','Health Promotion Event Completion','Campus Medical Officer In Charge',100,'%','H',2,null,'overdue','Events conducted ÷ planned events × 100'],
+ ['P1.19','P1','Health Promotion Event Outcome','SMO, Promotive Care',80,'%','H',2,70,'approved','Outcome achieved ÷ planned outcome × 100'],
+ ['P2.01','P2','Service User Satisfaction, Students','Senior Officer / Admin Team',80,'%','H',4,83,'approved','Satisfied student respondents ÷ total respondents × 100'],
+ ['P2.02','P2','Service User Satisfaction, Staff','Senior Officer / Admin Team',80,'%','H',4,77,'approved','Satisfied staff respondents ÷ total respondents × 100'],
+ ['P2.03','P2','Academic Feedback Satisfaction','SMO, Academics',80,'%','H',3,85,'submitted','Satisfied respondents ÷ total respondents × 100',170,200],
+ ['P2.04','P2','Complaint Resolution Rate','Senior Officer / Admin Team',75,'%','H',3,52,'approved','Complaints resolved ÷ complaints received × 100'],
+ ['P2.05','P2','Service Response Turnaround Time','Senior Officer / Admin Team',7,'days','L',1,6,'approved','Average days to respond or close requests'],
+ ['P3.01','P3','SIU Health and Wellness Module Delivery','SMO, Academics',100,'%','H',2,100,'approved','Sessions delivered ÷ planned sessions × 100'],
+ ['P3.02','P3','SIU Module Learner Feedback','SMO, Academics',80,'%','H',3,88,'approved','Satisfied learners ÷ respondents × 100'],
+ ['P3.03','P3','SSODL Health and Wellness Module Delivery','SMO, Academics',100,'%','H',2,90,'approved','Sessions delivered ÷ planned sessions × 100'],
+ ['P3.04','P3','SSODL Module Learner Feedback','SMO, Academics',80,'%','H',3,null,'draft','Satisfied learners ÷ respondents × 100'],
+ ['P4.01','P4','BLS / ITLS Certification Completion','SMO, Training',80,'%','H',4,61,'approved','Certified staff ÷ eligible staff × 100'],
+ ['P4.02','P4','SCHC Supported Training Facilitation','SMO, Training',100,'%','H',2,100,'approved','Support activities completed ÷ planned activities × 100'],
+ ['P4.03','P4','Mock Drill / Simulation Completion','SMO, Training',100,'%','H',2,50,'approved','Drills conducted ÷ planned drills × 100'],
+ ['P4.04','P4','CME / Skill Development Participation','SMO, Training',70,'%','H',2,74,'approved','Staff attending CME ÷ eligible staff × 100'],
+ ['P5.01','P5','SCOPUS Indexed Publication','Research Lead / Research Assistant',1,'yes / no','B',3,0,'approved','Publication achieved: 1 yes, 0 no'],
+ ['P5.02','P5','PhD Supervision / Academic Mentorship','Research Lead / Research Assistant',1,'No.','H',2,1,'approved','Active supervision achieved ÷ planned contribution'],
+ ['P6.01','P6','Income Sustainability Ratio','Assistant Admin Officer and Accountant',100,'%','H',5,94,'approved','Operational income ÷ operational expenditure × 100'],
+ ['P6.02','P6','Manpower Cost Ratio','Assistant Admin Officer and Accountant',25,'%','L',5,29,'approved','Manpower cost ÷ total expenditure × 100'],
+ ['P6.03','P6','Expense Ratio','Assistant Admin Officer and Accountant',50,'%','L',5,47,'approved','Total expenditure ÷ total income × 100'],
+ ['P6.04','P6','Surplus Generation Ratio','Assistant Admin Officer and Accountant',25,'%','H',5,6,'submitted','Operational surplus ÷ total income × 100',4.2,70]
+];
+function hash(s){let h=7;for(const c of s+'siu')h=(h*31+c.charCodeAt(0))>>>0;return (h.toString(16)+'9f3a7c21e4b0').slice(0,12)}
+const KPIS = RAW.map(r=>({id:r[0],p:r[1],name:r[2],role:r[3],target:r[4],unit:r[5],dir:r[6],alloc:r[7],actual:r[8],status:r[9],formula:r[10],num:r[11]??null,den:r[12]??null,owner:PEOPLE[r[3]],
+  files:(r[9]==='approved'||r[9]==='submitted')?[{n:`${r[0]}_evidence_2025_26.pdf`,s:'412 KB',h:hash(r[0])}]:[]}));
+KPIS.find(k=>k.id==='P1.05').returnReason='Denominator differs from the AWC register total of 312 cases. Please recheck the count and attach the register extract.';
+const PREV = {}; KPIS.forEach((k,i)=>{ if(k.actual!=null){ const f=[.9,.95,1.04,.86,.98][i%5]; PREV[k.id]=[+(k.actual*f*.95).toFixed(1),+(k.actual*f).toFixed(1)]; }});
+
+const SCEW = [
+  {id:'D1',name:'Preventive and promotive mental health',w:30,ach:86,c:'var(--c1)'},
+  {id:'D2',name:'Service utilisation and feedback',w:25,ach:88,c:'var(--c2)'},
+  {id:'D3',name:'Teaching',w:10,ach:92,c:'var(--c3)'},
+  {id:'D4',name:'Capacity building',w:15,ach:74,c:'var(--c4)'},
+  {id:'D5',name:'Research outcomes',w:5,ach:40,c:'var(--c5)'},
+  {id:'D6',name:'Outreach',w:10,ach:81,c:'var(--c6)'},
+  {id:'D7',name:'Financial sustainability',w:5,ach:70,c:'var(--c7)'}
+];
+const CAS = [
+  {id:'CA.014',k:'P1.06',issue:'Referral closures below the 70% target',cause:'Specialist referrals outside campus not tracked to closure',owner:'Dr Meera Kulkarni',due:'30 Nov 2026',status:'In progress',age:34},
+  {id:'CA.015',k:'P2.04',issue:'Complaint resolution at 52%',cause:'Complaints logged in two registers; duplicates left open',owner:'Anil Gokhale',due:'15 Nov 2026',status:'Open',age:12},
+  {id:'CA.016',k:'P4.03',issue:'Only half of planned mock drills held',cause:'Drill calendar clashed with exam schedule',owner:'Dr Vikram Shinde',due:'31 Dec 2026',status:'In progress',age:41},
+  {id:'CA.017',k:'P5.01',issue:'SCOPUS publication target missed',cause:'Manuscript under second review at journal',owner:'Dr Aditi Rane',due:'31 Jan 2027',status:'Planned',age:20},
+  {id:'CA.012',k:'P1.15',issue:'CWAC issue resolution at 58%',cause:'Maintenance issues depend on estate team turnaround',owner:'Dr Sameer Kale',due:'30 Sep 2026',status:'Closure check',age:63},
+  {id:'CA.018',k:'P6.04',issue:'Surplus ratio at 6% against 25%',cause:'Auto raised from submission; root cause pending',owner:'Rahul Jadhav',due:'Set by owner',status:'Open',age:4}
+];
+const CA_STATUSES = ['Open','Planned','In progress','Closure check'];
+const AUDIT = [
+  ['01 Oct 2026, 10:42','Dr Arvind Rao','Returned','P1.05','Status submitted → returned','Denominator mismatch with AWC register'],
+  ['01 Oct 2026, 09:18','Dr Sunita Mehra','Approved','P2.02','Status reviewed → approved',''],
+  ['30 Sep 2026, 17:05','Rahul Jadhav','Submitted','P6.04','Actual 6.0%, evidence attached',''],
+  ['30 Sep 2026, 16:40','System','Action raised','P6.04','CA.018 created for Red result',''],
+  ['30 Sep 2026, 12:11','Dr Meera Kulkarni','Submitted','P1.04','Actual 71.0%, evidence attached',''],
+  ['29 Sep 2026, 15:32','Nikhil More','Framework change','Master v1.2','Target P1.16 changed 21 → 30 days','Approved by Director, memo 26/09'],
+  ['29 Sep 2026, 11:02','Dr Arvind Rao','Verified','P1.15','Evidence hash matched',''],
+  ['28 Sep 2026, 18:44','Nikhil More','User added','Dr Kavita Joshi','Role: Data owner, SCHC',''],
+  ['27 Sep 2026, 10:15','System','Reminder sent','P1.18','Due date passed, owner and backup notified',''],
+  ['26 Sep 2026, 09:00','Nikhil More','Year opened','2025/26','Reporting window 01 Sep to 31 Oct 2026','']
+];
+const USERS = [
+  ['Dr Sunita Mehra','Director, SCHC','Executive approver','SCHC','Active','On'],
+  ['Dr Arvind Rao','SMO, Audit and Compliance','Reviewer','SCHC','Active','On'],
+  ['Dr Meera Kulkarni','Campus Medical Officer In Charge','Data owner','SCHC','Active','On'],
+  ['Dr Kavita Joshi','SMO, Promotive Care','Data owner','SCHC','Active','Pending'],
+  ['Rahul Jadhav','Assistant Admin Officer and Accountant','Data owner','SCHC','Active','On'],
+  ['Dr Rohan Deshpande','SMO, Preventive Care','Data owner','SCHC','Active','On'],
+  ['Dr Pooja Shah','Head, SCEW','Executive approver','SCEW','Active','On'],
+  ['Kiran Pawar','Coordinator, DSRW','Data owner','DSRW','Invited','Pending'],
+  ['Office of the Provost','Provost, SIU','Leadership','All institutes','Active','On'],
+  ['Board member','Board of Management','Board (read only)','All institutes','Active','On'],
+  ['Nikhil More','SIU IT','Admin','Platform','Active','On']
+];
+
+/* ================= State ================= */
+const S = {
+  role:null, screen:'login', inst:'SCHC', kpi:'P1.15', entry:'P1.01', review:'P1.04',
+  pf:'all', rf:'all', q:'', report:'summary', adminTab:'SCHC', phone:false, caView:'board', auditF:'All',
+  weights:Object.fromEntries(PARAMS.map(p=>[p.id,p.w])),
+  rag:{g:85,a:70}, bands:[[90,100],[75,75],[50,50],[25,25],[0,0]],
+  newFiles:[], scorecardApproved:false, yearLocked:false, actionFor:null, loginRole:'director'
+};
+const ROLES = {
+  owner:{name:'Dr Meera Kulkarni',title:'Data owner',scope:'SCHC',init:'MK',home:'tasks',desc:'Enters KPI data and evidence',
+    nav:[['Work',['tasks','entry']],['Insight',['inst','actions','reports']]]},
+  reviewer:{name:'Dr Arvind Rao',title:'Reviewer',scope:'SCHC',init:'AR',home:'review',desc:'Verifies data and evidence',
+    nav:[['Work',['review','actions']],['Insight',['inst','reports','audit']]]},
+  director:{name:'Dr Sunita Mehra',title:'Director',scope:'SCHC',init:'SM',home:'inst',desc:'Approves and locks the year',
+    nav:[['Work',['approve','actions']],['Insight',['inst','reports','archive','audit']]]},
+  provost:{name:'Office of the Provost',title:'Leadership',scope:'All institutes',init:'PR',home:'overview',desc:'Consolidated SIU view',
+    nav:[['Insight',['overview','inst','actions','reports','archive']]]},
+  board:{name:'Board member',title:'Board',scope:'Read only',init:'BM',home:'overview',desc:'Approved dashboards only',
+    nav:[['Insight',['overview','inst','reports','archive']]]},
+  admin:{name:'Nikhil More',title:'Platform admin',scope:'SIU IT',init:'NM',home:'year',desc:'Years, users and rules',
+    nav:[['Setup',['year','master','weights','rules','users']],['Control',['audit','archive']]]}
+};
+const SCREENS = {
+  guide:['Prototype guide','map'], overview:['SIU overview','grid'], inst:['Institute dashboard','inst'], kpi:['KPI detail','inst'],
+  tasks:['My KPIs','list'], entry:['Enter KPI data','edit'], review:['Review queue','check'], reviewItem:['Review KPI','check'],
+  approve:['Approve scorecard','stamp'], actions:['Corrective actions','alert'], actionForm:['Corrective action','alert'],
+  reports:['Reports','file'], archive:['Archive','box'], audit:['Audit log','clock'],
+  year:['Reporting year','cal'], master:['KPI master','layers'], weights:['Parameters and weights','pie'],
+  rules:['Scoring rules','sliders'], users:['Users and roles','users']
+};
+
+/* ================= Scoring engine ================= */
+function calc(k){
+  if(k.actual==null||isNaN(k.actual)) return {ach:null,cap:null,band:null,earned:null,rag:'p'};
+  let a;
+  if(k.dir==='B') a = k.actual>=1?100:0;
+  else if(k.dir==='H') a = k.actual/k.target*100;
+  else a = k.actual>0 ? k.target/k.actual*100 : 100;
+  const cap = Math.min(a,100);
+  const b = S.bands.find(x=>cap>=x[0]);
+  const band = b?b[1]/100:0;
+  return {ach:a,cap,band,earned:k.alloc*band,rag:ragOf(cap)};
+}
+const ragOf = v => v==null?'p':v>=S.rag.g?'g':v>=S.rag.a?'a':'r';
+function paramScores(){
+  return PARAMS.map(p=>{
+    const ks = KPIS.filter(k=>k.p===p.id);
+    const alloc = ks.reduce((s,k)=>s+k.alloc,0);
+    const earned = ks.reduce((s,k)=>s+(calc(k).earned||0),0);
+    const pend = ks.filter(k=>k.actual==null).length;
+    const pct = earned/alloc*100;
+    const w = +S.weights[p.id]||0;
+    return {...p,w,pct,score:pct*w/100,pend,count:ks.length,rag:ragOf(pct)};
+  });
+}
+const schcScore = () => paramScores().reduce((s,p)=>s+p.score,0);
+const scewScore = () => SCEW.reduce((s,d)=>s+d.ach*d.w/100,0);
+const RAGN = {g:'Green',a:'Amber',r:'Red',p:'Pending'};
+const RAGC = {g:'var(--g)',a:'var(--a)',r:'var(--r)',p:'var(--p)'};
+const chip = r => `<span class="chip k-${r}">${RAGN[r]}</span>`;
+const STN = {draft:['Draft','p'],submitted:['Submitted','b'],returned:['Returned','r'],approved:['Approved','g'],overdue:['Overdue','r']};
+const st = s => `<span class="chip k-${STN[s][1]}">${STN[s][0]}</span>`;
+const f1 = v => v==null?'–':(Math.round(v*10)/10).toFixed(1);
+const fv = (k,v) => v==null?'Awaiting data':k.unit==='No.'?String(v):(k.unit.startsWith('%')?f1(v)+'%':(k.dir==='B'?(v?'Yes':'No'):v+' '+k.unit));
+const tgt = k => k.dir==='B'?'Yes':k.unit==='No.'?String(k.target):(k.unit.startsWith('%')?k.target+'%':k.target+' '+k.unit);
+const dirLabel = d => d==='H'?'Higher is better':d==='L'?'Lower is better':'Yes or no';
+const K = id => KPIS.find(k=>k.id===id);
+const cap1 = s => s.charAt(0).toUpperCase()+s.slice(1);
+const cu = (v,d=1) => `<span class="cu" data-v="${v}" data-d="${d}">${(+v).toFixed(d)}</span>`;
+const daysLeft = () => Math.ceil((new Date('2026-10-31')-TODAY)/864e5);
+
+/* ================= Chart kit ================= */
+function donut(segs,{size=180,th=22,center='',sub='',legend=true}={}){
+  const r=(size-th)/2, c=2*Math.PI*r, cx=size/2, tot=segs.reduce((s,x)=>s+x.v,0)||1; let off=0;
+  const live=segs.filter(s=>s.v>0);
+  const arcs=live.map((s,i)=>{const len=s.v/tot*c, gap=live.length>1?3:0;
+    const el=`<circle class="arc" cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="${s.c}" stroke-width="${th}" stroke-linecap="butt" stroke-dasharray="${Math.max(.5,len-gap)} ${c}" stroke-dashoffset="${-off}" transform="rotate(-90 ${cx} ${cx})" style="--c:${c};animation-delay:${i*.08}s" data-tip="${esc(s.l)}: ${s.v} (${Math.round(s.v/tot*100)}%)"/>`;off+=len;return el}).join('');
+  const svg=`<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${esc(center+' '+sub)}">
+    <circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="var(--tint)" stroke-width="${th}"/>${arcs}
+    <text x="${cx}" y="${cx+2}" text-anchor="middle" font-size="${size*.17}" font-weight="800" fill="var(--ink)" class="${/^[\d.]+$/.test(center)?'cu':''}" data-v="${center}" data-d="${String(center).includes('.')?1:0}">${center}</text>
+    <text x="${cx}" y="${cx+size*.12}" text-anchor="middle" font-size="${Math.max(11,size*.065)}" font-weight="600" fill="var(--muted)">${sub}</text></svg>`;
+  if(!legend) return svg;
+  return `<div class="donut-wrap">${svg}<div class="legend">${segs.map(s=>`<div><i style="background:${s.c}"></i><span>${esc(s.l)}</span><b>${s.v%1?f1(s.v):s.v}</b><span class="pc">${Math.round(s.v/tot*100)}%</span></div>`).join('')}</div></div>`;
+}
+function pie(segs,{size=220,labels=true}={}){
+  const cx=size/2,r=size/2-6,tot=segs.reduce((s,x)=>s+x.v,0)||1;let a0=-Math.PI/2;
+  const parts=segs.filter(s=>s.v>0).map((s,i)=>{const a1=a0+s.v/tot*Math.PI*2, mid=(a0+a1)/2;
+    const x0=cx+r*Math.cos(a0),y0=cx+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cx+r*Math.sin(a1),lg=(a1-a0)>Math.PI?1:0;
+    const d=(a1-a0)>=Math.PI*2-1e-6?`M ${cx-r} ${cx} a ${r} ${r} 0 1 0 ${2*r} 0 a ${r} ${r} 0 1 0 ${-2*r} 0`:`M ${cx} ${cx} L ${x0} ${y0} A ${r} ${r} 0 ${lg} 1 ${x1} ${y1} Z`;
+    const pc=s.v/tot*100, lx=cx+r*.64*Math.cos(mid), ly=cx+r*.64*Math.sin(mid);
+    a0=a1;
+    return `<g class="slice" style="transform-origin:${cx}px ${cx}px;animation-delay:${i*.07}s" data-tip="${esc(s.l)}: ${f1(s.v)} (${Math.round(pc)}%)"><path d="${d}" fill="${s.c}" stroke="var(--surface)" stroke-width="2"/>${labels&&pc>=7?`<text x="${lx}" y="${ly+4}" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">${Math.round(pc)}%</text>`:''}</g>`;}).join('');
+  return `<div class="donut-wrap"><svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="Pie chart">${parts}</svg>
+  <div class="legend">${segs.map(s=>`<div><i style="background:${s.c}"></i><span>${esc(s.l)}</span><b>${s.v%1?f1(s.v):s.v}</b><span class="pc">${Math.round(s.v/tot*100)}%</span></div>`).join('')}</div></div>`;
+}
+function gauge(v,{size=230,dark=false,sub='out of 100',showZones=true,empty=false}={}){
+  const id=uid(), cx=size/2, r=size*.39, cy=size*.47, th=size*.085, rz=r+th*.5+7, h=cy+size*.13;
+  const arc=(rad)=>`M ${cx-rad} ${cy} A ${rad} ${rad} 0 0 1 ${cx+rad} ${cy}`;
+  const rag=ragOf(v), col=dark?'#fff':RAGC[rag];
+  const zone=(from,to,c)=>`<path d="${arc(rz)}" pathLength="100" fill="none" stroke="${c}" stroke-width="4" stroke-dasharray="0 ${from} ${to-from} 200" stroke-linecap="round" opacity="${dark?.9:.75}"/>`;
+  const ang=Math.PI*(1-Math.min(100,v)/100), mx=cx+r*Math.cos(ang), my=cy-r*Math.sin(ang);
+  return `<svg width="${size}" height="${h}" viewBox="0 0 ${size} ${h}" role="img" aria-label="Score ${f1(v)} out of 100">
+   <defs><linearGradient id="${id}" x1="0" x2="1"><stop offset="0" style="stop-color:${dark?'#93C5FD':RAGC[rag]};stop-opacity:${dark?1:.45}"/><stop offset="1" style="stop-color:${col}"/></linearGradient></defs>
+   <path d="${arc(r)}" fill="none" stroke="${dark?'rgba(255,255,255,.16)':'var(--tint)'}" stroke-width="${th}" stroke-linecap="round"/>
+   ${showZones?zone(0,S.rag.a,'#F87171')+zone(S.rag.a,S.rag.g,'#FBBF24')+zone(S.rag.g,100,'#34D399'):''}
+   <path class="gv" d="${arc(r)}" pathLength="100" fill="none" stroke="url(#${id})" stroke-width="${th}" stroke-linecap="round" stroke-dasharray="${Math.min(100,v)} 100"/>
+   <circle cx="${mx}" cy="${my}" r="${th*.32}" fill="${dark?'#0A2350':'var(--surface)'}" stroke="${col}" stroke-width="3" class="fadein"/>
+   <text x="${cx}" y="${cy-size*.03}" text-anchor="middle" font-size="${size*.19}" font-weight="800" fill="${dark?'#fff':'var(--ink)'}" class="${empty?'':'cu'}" data-v="${f1(v)}" data-d="1">${empty?'–':f1(v)}</text>
+   <text x="${cx}" y="${cy+size*.075}" text-anchor="middle" font-size="${Math.max(11,size*.055)}" font-weight="600" fill="${dark?'#C4D5F2':'var(--muted)'}">${sub}</text>
+   <text x="${cx-r}" y="${h-4}" text-anchor="middle" font-size="11" fill="${dark?'#A9BCDD':'var(--muted)'}">0</text><text x="${cx+r}" y="${h-4}" text-anchor="middle" font-size="11" fill="${dark?'#A9BCDD':'var(--muted)'}">100</text></svg>`;
+}
+function ring(pct,{size=64,th=8,color='var(--blue)',label}={}){
+  const r=(size-th)/2,c=2*Math.PI*r,cx=size/2;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="var(--tint)" stroke-width="${th}"/>
+  <circle class="arc" cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="${color}" stroke-width="${th}" stroke-linecap="round" stroke-dasharray="${c*pct/100} ${c}" transform="rotate(-90 ${cx} ${cx})" style="--c:${c}"/>
+  <text x="${cx}" y="${cx+4}" text-anchor="middle" font-size="${size*.22}" font-weight="800" fill="var(--ink)">${label??Math.round(pct)+'%'}</text></svg>`;
+}
+function hbars(rows,{marker=S.rag.g,max=100,fmt=v=>f1(v)+'%'}={}){
+  return `<div class="hbars">${rows.map((r,i)=>`<div class="hb" ${r.go||''} data-tip="${esc(r.tip||r.l)}"><div class="nm">${esc(r.l)}${r.s?`<small>${esc(r.s)}</small>`:''}</div>
+   <div class="tr" style="--k:${r.c}"><i class="grow" style="width:${Math.min(100,r.v/max*100)}%;animation-delay:${i*.06}s"></i>${marker!=null?`<u style="left:${marker/max*100}%"></u>`:''}</div><div class="vl">${fmt(r.v)}</div></div>`).join('')}</div>`;
+}
+function ribbon(items,{click=true,labels=true}={}){
+  return `<div class="ribbon">${items.map((p,i)=>`<div class="seg" style="flex:${p.w};--k:${RAGC[p.rag]}" ${click?`data-go="inst" data-pf="${p.id}"`:''} data-tip="${esc(p.name)}: ${f1(p.pct)}% achieved, weight ${p.w}">
+    <div class="fill" style="height:${Math.max(6,Math.min(100,p.pct))}%;animation-delay:${i*.07}s"></div><span>${p.id}</span></div>`).join('')}</div>
+    ${labels?`<div class="ribbon-l">${items.map(p=>`<div style="flex:${p.w}">${p.w}</div>`).join('')}</div>`:''}`;
+}
+function areaTrend(series,years,{h=230,min=50,max=100,W=420}={}){
+  const L=36,R=20,T=16,B=30, x=i=>L+i*(W-L-R)/(years.length-1), y=v=>T+(max-v)/(max-min)*(h-T-B);
+  const grid=[60,70,80,90,100].filter(v=>v>=min&&v<=max).map(v=>`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" ${v===S.rag.g?'':''}/><text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${v}</text>`).join('');
+  const thr=`<line x1="${L}" x2="${W-R}" y1="${y(S.rag.g)}" y2="${y(S.rag.g)}" stroke="var(--g)" stroke-dasharray="5 5" stroke-width="1.5"/><text x="${W-R}" y="${y(S.rag.g)-6}" text-anchor="end" font-size="11" font-weight="700" fill="var(--g)">Green ${S.rag.g}</text>`;
+  const body=series.map((s,si)=>{const pts=s.vals.map((v,i)=>v==null?null:[x(i),y(v)]).filter(Boolean);if(!pts.length)return'';const id=uid();
+    const line=pts.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' '), area=line+` L ${pts[pts.length-1][0]} ${h-B} L ${pts[0][0]} ${h-B} Z`;
+    return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:${s.c};stop-opacity:.32"/><stop offset="1" style="stop-color:${s.c};stop-opacity:0"/></linearGradient></defs>
+    <path class="fadein" d="${area}" fill="url(#${id})"/><path class="line" d="${line}" pathLength="1" fill="none" stroke="${s.c}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="animation-delay:${si*.2}s"/>
+    ${pts.map((p,i)=>{const v=s.vals.filter(v=>v!=null)[i];return `<circle cx="${p[0]}" cy="${p[1]}" r="5.5" fill="var(--surface)" stroke="${s.c}" stroke-width="3" class="fadein" data-tip="${s.n}, ${years[s.vals.indexOf(v)]}: ${f1(v)}"/>`}).join('')}`}).join('');
+  const xl=years.map((t,i)=>`<text x="${x(i)}" y="${h-8}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--muted)">${t}</text>`).join('');
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${h}" role="img" aria-label="Trend chart">${grid}${thr}${body}${xl}</svg></div>
+  <div class="scale">${series.map(s=>`<span><i style="background:${s.c}"></i>${s.n}</span>`).join('')}</div>`;
+}
+function columns(items,{h=240}={}){ // stacked: earned vs available weight
+  const W=600,L=34,R=10,T=20,B=34, max=Math.max(...items.map(i=>i.w))*1.12, bw=(W-L-R)/items.length*.56, y=v=>T+(max-v)/max*(h-T-B);
+  const grid=[0,10,20,30,40].filter(v=>v<=max).map(v=>`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${v}</text>`).join('');
+  const bars=items.map((it,i)=>{const cx=L+(i+.5)*(W-L-R)/items.length, x0=cx-bw/2;
+    return `<g data-tip="${esc(it.id+' '+it.name)}: ${f1(it.score)} of ${it.w} points" style="cursor:pointer" data-go="inst" data-pf="${it.id}">
+      <rect x="${x0}" y="${y(it.w)}" width="${bw}" height="${y(0)-y(it.w)}" rx="7" fill="var(--tint)" stroke="var(--line2)" stroke-dasharray="3 3"/>
+      <rect class="rise" x="${x0}" y="${y(it.score)}" width="${bw}" height="${y(0)-y(it.score)}" rx="7" fill="${RAGC[it.rag]}" style="animation-delay:${i*.07}s"/>
+      <text x="${cx}" y="${y(it.w)-6}" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)">${f1(it.score)}</text>
+      <text x="${cx}" y="${h-12}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--muted)">${it.id}</text></g>`}).join('');
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${h}" role="img" aria-label="Points earned against available points">${grid}${bars}</svg></div>
+  <div class="scale"><span><i style="background:var(--g)"></i>Earned, Green</span><span><i style="background:var(--a)"></i>Earned, Amber</span><span><i style="background:var(--r)"></i>Earned, Red</span><span><i style="background:var(--tint);border:1px dashed var(--line2)"></i>Points available</span></div>`;
+}
+function radar(axes,{size=300,color='var(--blue)'}={}){
+  const cx=size/2, R=size*.34, n=axes.length, pt=(i,v)=>{const a=-Math.PI/2+i*2*Math.PI/n;return [cx+R*v/100*Math.cos(a),cx+R*v/100*Math.sin(a)]};
+  const ring=v=>`<polygon points="${axes.map((_,i)=>pt(i,v).join(',')).join(' ')}" fill="none" stroke="var(--line)" />`;
+  const id=uid();
+  const poly=axes.map((a,i)=>pt(i,Math.min(100,a.v)).join(',')).join(' ');
+  const thr=axes.map((_,i)=>pt(i,S.rag.g).join(',')).join(' ');
+  return `<div class="chart" style="max-width:${size+40}px;margin:0 auto"><svg viewBox="-20 0 ${size+40} ${size}" role="img" aria-label="Radar chart">
+   <defs><radialGradient id="${id}"><stop offset="0" style="stop-color:${color};stop-opacity:.15"/><stop offset="1" style="stop-color:${color};stop-opacity:.4"/></radialGradient></defs>
+   ${[25,50,75,100].map(ring).join('')}
+   ${axes.map((_,i)=>{const p=pt(i,100);return `<line x1="${cx}" y1="${cx}" x2="${p[0]}" y2="${p[1]}" stroke="var(--line)"/>`}).join('')}
+   <polygon points="${thr}" fill="none" stroke="var(--g)" stroke-width="1.5" stroke-dasharray="5 4"/>
+   <polygon class="slice" style="transform-origin:${cx}px ${cx}px" points="${poly}" fill="url(#${id})" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>
+   ${axes.map((a,i)=>{const p=pt(i,Math.min(100,a.v));return `<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${RAGC[ragOf(a.v)]}" stroke="var(--surface)" stroke-width="2" data-tip="${esc(a.t||a.l)}: ${f1(a.v)}%"/>`}).join('')}
+   ${axes.map((a,i)=>{const p=pt(i,122);const an=Math.abs(p[0]-cx)<8?'middle':p[0]>cx?'start':'end';return `<text x="${p[0]}" y="${p[1]+4}" text-anchor="${an}" font-size="12" font-weight="700" fill="var(--ink2)">${esc(a.l)}</text>`}).join('')}
+  </svg></div><div class="scale" style="justify-content:center"><span><i style="background:${color}"></i>Achievement</span><span><i style="background:none;border:2px dashed var(--g)"></i>Green threshold ${S.rag.g}%</span></div>`;
+}
+function heatmap(){
+  return `<div class="heat">${PARAMS.map(p=>`<div class="row"><b>${p.id}</b><div class="tiles">${KPIS.filter(k=>k.p===p.id).map((k,i)=>{const c=calc(k);
+    if(c.cap==null) return `<div class="tile pend" data-go="kpi" data-kpi="${k.id}" data-tip="${k.id} ${esc(k.name)}: awaiting data" style="animation-delay:${i*.02}s">${k.id.slice(3)}</div>`;
+    const mix=Math.round(35+c.cap*.6);
+    return `<div class="tile" data-go="kpi" data-kpi="${k.id}" data-tip="${k.id} ${esc(k.name)}: ${f1(c.cap)}% achieved" style="background:color-mix(in srgb,${RAGC[c.rag]} ${mix}%,var(--surface));animation-delay:${i*.02}s;color:${mix>70?'#fff':'var(--ink)'}">${k.id.slice(3)}</div>`}).join('')}</div></div>`).join('')}</div>
+    <div class="scale"><span><i style="background:var(--g)"></i>Green ${S.rag.g}%+</span><span><i style="background:var(--a)"></i>Amber ${S.rag.a} to ${S.rag.g-1}%</span><span><i style="background:var(--r)"></i>Red below ${S.rag.a}%</span><span><i style="background:var(--tint);border:1px dashed var(--line2)"></i>Pending</span></div>`;
+}
+function spark(vals,color='var(--blue)',w=90,h=30){
+  const mn=Math.min(...vals),mx=Math.max(...vals),x=i=>i*(w-4)/(vals.length-1)+2,y=v=>h-3-(v-mn)/((mx-mn)||1)*(h-6);
+  return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline class="line" pathLength="1" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${vals.map((v,i)=>x(i)+','+y(v)).join(' ')}"/></svg>`;
+}
+function vcols(items,{h=200,max,marker,W=420}={}){ // simple columns
+  const L=30,R=10,T=18,B=30; max=max||Math.max(...items.map(i=>i.v))*1.15; const bw=(W-L-R)/items.length*.5, y=v=>T+(max-v)/max*(h-T-B);
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${h}">${[0,.25,.5,.75,1].map(f=>`<line x1="${L}" x2="${W-R}" y1="${y(max*f)}" y2="${y(max*f)}" stroke="var(--line)"/>`).join('')}
+  ${marker!=null?`<line x1="${L}" x2="${W-R}" y1="${y(marker.v)}" y2="${y(marker.v)}" stroke="var(--g)" stroke-dasharray="5 4" stroke-width="1.5"/><text x="${W-R}" y="${y(marker.v)-6}" text-anchor="end" font-size="11" font-weight="700" fill="var(--g)">${marker.l}</text>`:''}
+  ${items.map((it,i)=>{const cx=L+(i+.5)*(W-L-R)/items.length;return `<g data-tip="${esc(it.l)}: ${it.t||it.v}"><rect class="rise" x="${cx-bw/2}" y="${y(it.v)}" width="${bw}" height="${Math.max(0,y(0)-y(it.v))}" rx="7" fill="${it.c}" style="animation-delay:${i*.08}s"/>
+  <text x="${cx}" y="${y(it.v)-7}" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)">${it.t||it.v}</text><text x="${cx}" y="${h-10}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--muted)">${esc(it.l)}</text></g>`}).join('')}</svg></div>`;
+}
+
+/* ================= Shared UI ================= */
+const statCard = ({l,v,d,suffix='',icon='trend',k='var(--blue)',delta,foot,sp}) => `<div class="stat" style="--k:${k}">
+  <div class="top-row"><span class="lbl">${l}</span><span class="ico">${ic(icon)}</span></div>
+  <div class="val">${typeof v==='number'?cu(v,d??(Number.isInteger(v)?0:1)):v}${suffix?`<small> ${suffix}</small>`:''}</div>
+  <div class="foot">${delta!=null?`<span class="delta ${delta>=0?'up':'down'}">${delta>=0?'▲':'▼'} ${Math.abs(delta).toFixed(1)}</span>`:''}${foot?`<span>${foot}</span>`:''}</div>${sp||''}</div>`;
+const banner=(t,k='b',icon='info')=>`<div class="banner" style="--k:${RAGC[k]||'var(--blue)'}">${ic(k==='b'?icon:'alert')}<div>${t}</div></div>`;
+const readOnly = () => S.role==='board' ? banner('<b>Read only access.</b> Dashboards and reports show approved data only.') : '';
+const back = (go,label) => `<a class="back" href="#" data-go="${go}">${ic('left')}${label}</a>`;
+const mini = (v,r) => `<span class="mini"><i class="grow" style="width:${Math.min(100,v||0)}%;background:${RAGC[r]}"></i></span>`;
+const kpiRow = k => {const c=calc(k);return `<tr class="click" data-go="kpi" data-kpi="${k.id}"><td class="kid">${k.id}</td><td><b style="font-weight:600">${esc(k.name)}</b><div class="small muted hide-n">${esc(k.owner)}</div></td><td class="num">${tgt(k)}</td><td class="num">${k.actual==null?'–':fv(k,k.actual)}</td><td style="white-space:nowrap">${c.cap==null?'<span class="muted">–</span>':mini(c.cap,c.rag)+f1(c.cap)+'%'}</td><td class="num">${c.earned==null?'–':f1(c.earned)+' / '+k.alloc}</td><td>${chip(c.rag)}</td><td>${st(k.status)}</td></tr>`};
+const kpiHead = `<thead><tr><th>ID</th><th>Performance indicator</th><th class="num">Target</th><th class="num">Actual</th><th>Achievement</th><th class="num">Score</th><th>RAG</th><th>Status</th></tr></thead>`;
+const ragCounts = (list=KPIS) => {const n={g:0,a:0,r:0,p:0};list.forEach(k=>n[calc(k).rag]++);return n};
+const ragDonut = (list=KPIS,size=170) => {const n=ragCounts(list);return donut([{l:'Green',v:n.g,c:'var(--g)'},{l:'Amber',v:n.a,c:'var(--a)'},{l:'Red',v:n.r,c:'var(--r)'},{l:'Pending',v:n.p,c:'var(--p)'}],{size,center:String(list.length),sub:'KPIs'})};
+const statusDonut = (list=KPIS,size=170) => {const c=s=>list.filter(k=>k.status===s).length;return donut([{l:'Approved',v:c('approved'),c:'var(--g)'},{l:'Submitted',v:c('submitted'),c:'var(--c1)'},{l:'Returned',v:c('returned'),c:'var(--a)'},{l:'Draft',v:c('draft'),c:'var(--p)'},{l:'Overdue',v:c('overdue'),c:'var(--r)'}],{size,center:String(Math.round((list.length-c('draft')-c('overdue'))/list.length*100)),sub:'% submitted'})};
+
+/* ================= Screens ================= */
+const V = {};
+
+V.guide = () => {
+  const steps = [
+    ['admin','year','Open the reporting year','Admin opens 2025/26, assigns an owner, backup and reviewer to each KPI, and sets due dates.'],
+    ['owner','tasks','See assigned KPIs','Each owner sees only their KPIs with status, due dates and reminders.'],
+    ['owner','entry','Enter data and evidence','Owner enters annual counts, sees the live score, uploads evidence and submits.'],
+    ['reviewer','review','Verify or return','Reviewer checks figures against evidence, then verifies or returns with a reason.'],
+    ['director','approve','Approve the scorecard','Director reviews parameter scores and open items, then approves.'],
+    ['director','actions','Track corrective actions','Amber and Red KPIs raise actions with owner, cause and closure date.'],
+    ['provost','overview','See the SIU picture','Provost and Board drill down from SIU to institute, parameter, KPI and evidence.'],
+    ['director','archive','Lock and archive','At year end the Director locks the year and it becomes read only.']
+  ];
+  return `<div class="wrap"><div class="hero"><div><h1>How the platform works</h1><p class="sub">Eight steps across one reporting year. Open any step to see that screen as the right role.</p>
+    <div class="chips"><span class="hchip">19 screens</span><span class="hchip">6 roles</span><span class="hchip">3 institutes</span></div></div>
+    <div><button class="btn" data-go="login">${ic('out')}Back to sign in</button></div></div>
+  <div class="flow mt">${steps.map((s,i)=>`<div class="step" style="animation:fadeUp .4s ${i*.05}s both"><div class="n">${i+1}</div><h3>${s[2]}</h3><p>${s[3]}</p><div class="who">${ROLES[s[0]].title}</div><button class="btn sm" data-as="${s[0]}" data-go="${s[1]}">Open this step</button></div>`).join('')}</div></div>`;
+};
+
+V.overview = () => {
+  const s=schcScore(), e=scewScore(), cons=(s+e)/2, ps=paramScores(), n=ragCounts();
+  const reds = KPIS.filter(k=>calc(k).rag==='r');
+  const subm = KPIS.filter(k=>!['draft','overdue'].includes(k.status)).length;
+  const scewItems = SCEW.map(d=>({...d,pct:d.ach,rag:ragOf(d.ach)}));
+  const instCard=(name,sub,score,rib,go,delta)=>`<div class="card"><div class="card-h"><div><h2>${name}</h2><p>${sub}</p></div>${score==null?'<span class="chip k-p">Pending</span>':chip(ragOf(score))}</div>
+    ${score==null?`<div class="empty" style="padding:18px 6px"><div class="ei">${ic('hourglass')}</div><b>Framework awaited</b><p class="muted small" style="margin:6px 0 0">Scoring starts once the DSRW framework is approved and loaded.</p></div>`:
+    `<div style="display:flex;justify-content:center">${gauge(score,{size:210})}</div><div style="display:flex;justify-content:center;margin:-2px 0 14px"><span class="delta ${delta>=0?'up':'down'}">${delta>=0?'▲':'▼'} ${Math.abs(delta).toFixed(1)} vs 2024/25</span></div>${rib}
+    <button class="btn sm mt" style="width:100%" ${go}>Open dashboard</button>`}</div>`;
+  return `<div class="wrap">${readOnly()}
+  <div class="hero"><div><h1>SIU performance, 2025/26</h1><p class="sub">Consolidated KPI view across student facing service institutes. Provisional until each Director approves.</p>
+    <div class="chips"><span class="hchip"><i style="background:#34D399"></i>${n.g} Green</span><span class="hchip"><i style="background:#FBBF24"></i>${n.a} Amber</span><span class="hchip"><i style="background:#F87171"></i>${n.r} Red</span><span class="hchip"><i style="background:#CBD5E1"></i>${n.p} Pending</span><span class="hchip">${daysLeft()} days left to submit</span></div></div>
+    <div style="text-align:center">${gauge(cons,{size:240,dark:true,sub:'Consolidated score'})}</div></div>
+  <div class="grid g4 overlap">
+    ${statCard({l:'Consolidated score',v:cons,suffix:'/ 100',icon:'target',delta:cons-75.8,foot:'vs 2024/25',sp:spark([71.2,73.1,75.8,cons])})}
+    ${statCard({l:'SCHC KPIs submitted',v:subm,suffix:'/ '+KPIS.length,d:0,icon:'check',k:'var(--c4)',foot:`${Math.round(subm/KPIS.length*100)}% complete`})}
+    ${statCard({l:'KPIs in Red',v:reds.length,d:0,icon:'alert',k:'var(--r)',foot:'Each has a corrective action'})}
+    ${statCard({l:'Open corrective actions',v:CAS.length,d:0,icon:'clock',k:'var(--a)',foot:'Average age 29 days'})}
+  </div>
+  <div class="grid g3 collapse mt">
+    ${instCard('SCHC','Health care · 6 parameters · 38 KPIs',s,ribbon(ps),'data-go="inst" data-inst="SCHC"',s-74)}
+    ${instCard('SCEW','Emotional wellbeing · 7 domains',e,ribbon(scewItems,{click:false}),'data-go="inst" data-inst="SCEW"',e-77.5)}
+    ${instCard('DSRW','Sports, recreation and wellness',null)}
+  </div>
+  <div class="grid g3 collapse mt">
+    <div class="card"><div class="card-h"><div><h2>KPI health</h2><p>SCHC KPIs by RAG status</p></div></div>${ragDonut()}</div>
+    <div class="card"><div class="card-h"><div><h2>Submission progress</h2><p>Where each SCHC KPI sits in the workflow</p></div></div>${statusDonut()}</div>
+    <div class="card"><div class="card-h"><div><h2>Three year trend</h2><p>Institute score out of 100</p></div></div>${areaTrend([{n:'SCHC',c:'var(--c1)',vals:[71.2,74.0,s]},{n:'SCEW',c:'var(--c4)',vals:[null,77.5,e]}],['2023/24','2024/25','2025/26'],{min:60,max:100,h:220})}</div>
+  </div>
+  <div class="grid g12 mt">
+    <div class="card"><div class="card-h"><div><h2>Parameter balance</h2><p>SCHC achievement by parameter</p></div></div>${radar(ps.map(p=>({l:p.id,t:p.name,v:p.pct})),{size:280})}</div>
+    <div class="card"><div class="card-h"><div><h2>KPI heatmap</h2><p>Every SCHC KPI, coloured by achievement. Select a tile to drill down.</p></div></div>${heatmap()}</div>
+  </div>
+  <div class="card mt"><div class="card-h"><div><h2>Needs attention</h2><p>KPIs in Red across institutes</p></div><button class="btn sm" data-go="actions">See corrective actions</button></div>
+  <div class="tw"><table>${kpiHead}<tbody>${reds.map(kpiRow).join('')}</tbody></table></div></div></div>`;
+};
+
+V.inst = () => {
+  if(S.inst==='SCEW'){
+    const e=scewScore(), items=SCEW.map(d=>({...d,pct:d.ach,rag:ragOf(d.ach)}));
+    return `<div class="wrap">${readOnly()}
+    <div class="hero"><div><h1>SCEW dashboard</h1><p class="sub">Symbiosis Centre for Emotional Wellbeing · reporting year 2025/26</p>
+    <div class="chips"><span class="hchip">7 domains</span><span class="hchip">Draft framework v0.9</span><button class="btn sm" data-inst="SCHC" data-go="inst">Switch to SCHC</button></div></div>
+    <div>${gauge(e,{size:230,dark:true,sub:'Institute score'})}</div></div>
+    <div class="mt">${banner('SCEW framework is in draft. Baseline period (calendar or academic year) is awaiting confirmation.','a')}</div>
+    <div class="grid g21"><div class="card"><div class="card-h"><div><h2>Domain achievement</h2><p>Marker shows the Green threshold</p></div></div>${hbars(items.map(d=>({l:d.name,s:`${d.id} · weight ${d.w}`,v:d.ach,c:RAGC[d.rag]})))}</div>
+    <div class="card"><div class="card-h"><div><h2>Weight by domain</h2><p>Share of the 100 point score</p></div></div>${pie(SCEW.map(d=>({l:d.id+' '+d.name.split(' ')[0],v:d.w,c:d.c})),{size:190})}</div></div>
+    <div class="grid g2 mt"><div class="card"><div class="card-h"><div><h2>Domain balance</h2></div></div>${radar(SCEW.map(d=>({l:d.id,t:d.name,v:d.ach})),{size:270,color:'var(--c4)'})}</div>
+    <div class="card"><div class="card-h"><div><h2>Points earned</h2><p>Earned against points available per domain</p></div></div>${columns(items.map(d=>({...d,score:d.ach*d.w/100})))}</div></div></div>`;
+  }
+  const ps=paramScores(), s=schcScore(), n=ragCounts();
+  const ks = KPIS.filter(k=>(S.pf==='all'||k.p===S.pf)&&(S.rf==='all'||calc(k).rag===S.rf)&&(!S.q||(k.id+k.name+k.owner).toLowerCase().includes(S.q.toLowerCase())));
+  const lost=100-s;
+  return `<div class="wrap">${readOnly()}
+  <div class="hero"><div><h1>SCHC dashboard</h1><p class="sub">Symbiosis Centre of Health Care · reporting year 2025/26</p>
+    <div class="chips"><span class="hchip">Provisional</span><span class="hchip">${n.p} KPIs pending</span><span class="hchip"><i style="background:#34D399"></i>${n.g} Green</span><span class="hchip"><i style="background:#FBBF24"></i>${n.a} Amber</span><span class="hchip"><i style="background:#F87171"></i>${n.r} Red</span>
+    ${['provost','board'].includes(S.role)?`<button class="btn sm" data-inst="SCEW" data-go="inst">Switch to SCEW</button>`:''}<button class="btn sm" data-go="reports">${ic('down')}Export</button></div></div>
+    <div>${gauge(s,{size:240,dark:true,sub:'Institute score'})}</div></div>
+  <div class="grid g4 overlap">
+    ${statCard({l:'Institute score',v:s,suffix:'/ 100',icon:'target',delta:s-74,foot:'vs 2024/25',sp:spark([71.2,74,s])})}
+    ${statCard({l:'Points lost',v:lost,suffix:'pts',icon:'trend',k:'var(--r)',foot:'Mostly in P1 and P6'})}
+    ${statCard({l:'KPIs Green',v:n.g,d:0,suffix:'/ '+KPIS.length,icon:'shield',k:'var(--g)',foot:`${Math.round(n.g/KPIS.length*100)}% of the framework`})}
+    ${statCard({l:'Evidence complete',v:KPIS.filter(k=>k.files.length).length,d:0,suffix:'/ '+KPIS.length,icon:'file',k:'var(--c3)',foot:'Hash verified on upload'})}
+  </div>
+  <div class="grid g21 mt">
+    <div class="card"><div class="card-h"><div><h2>Parameter achievement</h2><p>Bar shows achievement; marker is the Green threshold. Select a parameter to filter KPIs.</p></div></div>
+      ${hbars(ps.map(p=>({l:p.id+' '+p.short,s:`Weight ${p.w} · ${p.count} KPIs${p.pend?`, ${p.pend} pending`:''}`,v:p.pct,c:RAGC[p.rag],go:`data-go="inst" data-pf="${p.id}"`,tip:`${p.name}: ${f1(p.score)} of ${p.w} points`})))}</div>
+    <div class="card"><div class="card-h"><div><h2>Where the score comes from</h2><p>Points earned by parameter, and points lost</p></div></div>
+      ${pie([...ps.map(p=>({l:p.id+' '+p.short,v:p.score,c:p.c})),{l:'Points lost',v:lost,c:'var(--line2)'}],{size:180})}</div>
+  </div>
+  <div class="grid g3 collapse mt">
+    <div class="card"><div class="card-h"><div><h2>RAG distribution</h2></div></div>${ragDonut(KPIS,160)}</div>
+    <div class="card span2"><div class="card-h"><div><h2>Earned against available points</h2><p>Dashed outline is the parameter weight</p></div></div>${columns(ps)}</div>
+  </div>
+  <div class="grid g12 mt">
+    <div class="card"><div class="card-h"><div><h2>Parameter balance</h2></div></div>${radar(ps.map(p=>({l:p.id,t:p.name,v:p.pct})),{size:260})}</div>
+    <div class="card"><div class="card-h"><div><h2>KPI heatmap</h2><p>Select a tile to open the KPI</p></div></div>${heatmap()}</div>
+  </div>
+  <div class="card mt" id="kpiTable"><div class="card-h"><div><h2>Performance indicators</h2><p>${ks.length} of ${KPIS.length} shown</p></div>
+    <input class="input" style="max-width:240px" placeholder="Filter by ID, name or owner" data-q value="${esc(S.q)}"></div>
+    <div class="filters" style="margin-bottom:14px"><button class="pill ${S.pf==='all'?'on':''}" data-pf="all">All parameters</button>${PARAMS.map(p=>`<button class="pill ${S.pf===p.id?'on':''}" data-pf="${p.id}">${p.id}</button>`).join('')}
+    <span style="width:10px"></span>${['all','g','a','r','p'].map(r=>`<button class="pill ${S.rf===r?'on':''}" data-rf="${r}">${r==='all'?'All RAG':RAGN[r]}</button>`).join('')}</div>
+  <div class="tw"><table>${kpiHead}<tbody id="kpiBody">${ks.map(kpiRow).join('')||`<tr><td colspan="8"><div class="empty"><div class="ei">${ic('search')}</div><b>Nothing matches these filters</b><p class="muted small">Choose another parameter or RAG status.</p></div></td></tr>`}</tbody></table></div></div></div>`;
+};
+
+V.kpi = () => {
+  const k=K(S.kpi), c=calc(k), p=PARAMS.find(x=>x.id===k.p), ca=CAS.find(a=>a.k===k.id), pv=PREV[k.id]||[null,null];
+  const hist=[['2023/24',pv[0]],['2024/25',pv[1]],['2025/26',k.actual]];
+  return `<div class="wrap">${back('inst',p.id+' '+p.name)}
+  <div class="ph"><div><h1>${k.id} ${esc(k.name)}</h1><p class="sub">Owner ${esc(k.owner)} · Reviewer Dr Arvind Rao · ${dirLabel(k.dir)}</p></div><div class="acts">${chip(c.rag)} ${st(k.status)}</div></div>
+  ${k.status==='returned'?banner('<b>Returned by reviewer.</b> '+esc(k.returnReason),'r'):''}
+  <div class="grid g4">
+    ${statCard({l:'Target',v:tgt(k),icon:'target'})}
+    ${statCard({l:'Actual',v:k.actual==null?'–':fv(k,k.actual),icon:'trend',k:RAGC[c.rag],delta:pv[1]!=null&&k.actual!=null&&k.dir!=='B'?(k.dir==='L'?pv[1]-k.actual:k.actual-pv[1]):null,foot:pv[1]!=null?'vs 2024/25':''})}
+    ${statCard({l:'Achievement',v:c.cap==null?'–':c.cap,suffix:c.cap==null?'':'%',icon:'pie',k:RAGC[c.rag],foot:'Capped at 100'})}
+    ${statCard({l:'Score earned',v:c.earned==null?'–':c.earned,suffix:'/ '+k.alloc,icon:'shield',k:'var(--c3)',foot:c.band==null?'':`${c.band*100}% band`})}
+  </div>
+  <div class="grid g21 mt"><div class="stack">
+    <div class="card"><div class="card-h"><div><h2>Three year view</h2><p>Annual actual against target</p></div></div>
+    ${k.dir==='B'?`<p class="muted">Yes or no KPI: ${k.actual?'achieved':'not achieved'} this year.</p>`:vcols(hist.filter(h=>h[1]!=null).map((h,i,a)=>({l:h[0],v:h[1],t:fv(k,h[1]),c:i===a.length-1?RAGC[c.rag]:'var(--line2)'})),{marker:{v:k.target,l:'Target '+tgt(k)},max:Math.max(k.target,...hist.map(h=>h[1]||0))*1.25,W:680,h:240})}</div>
+    <div class="card"><div class="card-h"><div><h2>How it is calculated</h2></div></div><dl class="kv"><dt>Formula</dt><dd>${esc(k.formula)}</dd>
+    ${k.num!=null?`<dt>Numerator</dt><dd>${k.num}</dd><dt>Denominator</dt><dd>${k.den}</dd>`:''}
+    <dt>Direction</dt><dd>${dirLabel(k.dir)}</dd><dt>Graded band</dt><dd>${c.band==null?'Scored once data is approved':`${c.band*100}% of allocated points`}</dd><dt>Frequency</dt><dd>Annual, complete year data</dd></dl></div>
+    <div class="card"><div class="card-h"><div><h2>Evidence</h2><p>Hashed on upload to detect any later change</p></div></div>
+    ${k.files.length?k.files.map(f=>`<div class="file"><div class="fi">PDF</div><div class="meta"><b>${f.n}</b><span>${f.s} · SHA 256 ${f.h}… · uploaded by ${esc(k.owner)}</span></div><span class="chip k-g">Verified</span></div>`).join(''):`<div class="empty"><div class="ei">${ic('file')}</div><b>Evidence appears once the owner submits</b></div>`}</div>
+  </div><div class="stack">
+    <div class="card" style="text-align:center"><div class="card-h" style="text-align:left"><div><h2>Achievement</h2></div></div>${c.cap==null?`<div class="empty"><div class="ei">${ic('hourglass')}</div><b>Awaiting data</b></div>`:gauge(c.cap,{size:230,sub:'% of target'})}</div>
+    ${ca?`<div class="card"><div class="card-h"><div><h2>Corrective action</h2><p>${ca.id}</p></div><span class="chip ${ca.status==='Closure check'?'k-g':'k-a'}">${ca.status}</span></div><dl class="kv"><dt>Issue</dt><dd>${ca.issue}</dd><dt>Cause</dt><dd>${ca.cause}</dd><dt>Owner</dt><dd>${ca.owner}</dd><dt>Due</dt><dd>${ca.due}</dd></dl><button class="btn sm mt" style="width:100%" data-go="actionForm" data-ca="${ca.id}">Open action</button></div>`:''}
+    <div class="card"><div class="card-h"><div><h2>Activity</h2></div></div><ul class="tl">
+      ${k.status==='approved'?`<li style="--k:var(--g)"><b>Approved by Dr Sunita Mehra</b><span>28 Sep 2026, 16:20</span></li><li style="--k:var(--c4)"><b>Verified by Dr Arvind Rao</b><span>26 Sep 2026, 11:02</span></li>`:''}
+      ${k.status==='returned'?`<li style="--k:var(--r)"><b>Returned by Dr Arvind Rao</b><span>01 Oct 2026, 10:42</span></li>`:''}
+      ${!['draft','overdue'].includes(k.status)?`<li><b>Submitted by ${esc(k.owner)}</b><span>22 Sep 2026, 15:47</span></li>`:''}
+      <li style="--k:var(--p)"><b>Assigned to ${esc(k.owner)}</b><span>01 Sep 2026, due 15 Oct 2026</span></li></ul></div>
+  </div></div></div>`;
+};
+
+V.tasks = () => {
+  const mine = KPIS.filter(k=>k.owner==='Dr Meera Kulkarni');
+  const due = {draft:'15 Oct 2026',overdue:'30 Sep 2026',returned:'08 Oct 2026'};
+  const cnt = s=>mine.filter(k=>k.status===s).length;
+  const done = mine.filter(k=>['submitted','approved'].includes(k.status)).length;
+  return `<div class="wrap">
+  <div class="hero"><div><h1>Good morning, Meera</h1><p class="sub">You own ${mine.length} KPIs for 2025/26. The entry window closes on 31 Oct 2026.</p>
+    <div class="chips"><span class="hchip">${daysLeft()} days left</span><span class="hchip"><i style="background:#F87171"></i>${cnt('overdue')} overdue</span><span class="hchip"><i style="background:#FBBF24"></i>${cnt('returned')} returned</span></div>
+    <div style="margin-top:16px"><button class="btn" data-go="entry" data-entry="P1.01" style="background:#fff;color:#0A2350;border-color:#fff">${ic('edit')}Enter data for P1.01</button></div></div>
+    <div style="text-align:center;color:#fff">${ring(done/mine.length*100,{size:150,th:14,color:'#93C5FD'}).replace('fill="var(--ink)"','fill="#fff"').replace('stroke="var(--tint)"','stroke="rgba(255,255,255,.18)"')}<div class="small" style="color:#C4D5F2;margin-top:6px">${done} of ${mine.length} submitted</div></div></div>
+  <div class="grid g4 overlap">
+    ${statCard({l:'To enter',v:cnt('draft')+cnt('overdue'),d:0,icon:'edit',k:'var(--c1)',foot:'Including 1 overdue'})}
+    ${statCard({l:'Returned to you',v:cnt('returned'),d:0,icon:'alert',k:'var(--a)',foot:'Correct and resubmit'})}
+    ${statCard({l:'With reviewer',v:cnt('submitted'),d:0,icon:'clock',k:'var(--c3)',foot:'Average review 1.6 days'})}
+    ${statCard({l:'Approved',v:cnt('approved'),d:0,icon:'check',k:'var(--g)',foot:'Locked for this year'})}
+  </div>
+  ${cnt('overdue')?`<div class="mt">${banner('<b>P1.18 is overdue.</b> Your backup, Dr Kavita Joshi, has also been reminded.','r')}</div>`:''}
+  <div class="grid g21 mt"><div class="card"><div class="card-h"><div><h2>Assigned KPIs</h2><p>Sorted by what needs you first</p></div></div><div class="tw"><table><thead><tr><th>ID</th><th>Performance indicator</th><th class="num">Target</th><th>Due</th><th>Status</th><th></th></tr></thead><tbody>
+  ${[...mine].sort((a,b)=>['overdue','returned','draft','submitted','approved'].indexOf(a.status)-['overdue','returned','draft','submitted','approved'].indexOf(b.status)).map(k=>{const act=['draft','overdue','returned'].includes(k.status);return `<tr><td class="kid">${k.id}</td><td><b style="font-weight:600">${esc(k.name)}</b>${k.status==='returned'?`<div class="small" style="color:var(--r)">${esc(k.returnReason)}</div>`:''}</td><td class="num">${tgt(k)}</td><td style="white-space:nowrap">${due[k.status]||'<span class="muted">Done</span>'}</td><td>${st(k.status)}</td>
+  <td>${act?`<button class="btn sm pri" data-go="entry" data-entry="${k.id}">${k.status==='returned'?'Correct':'Enter data'}</button>`:`<button class="btn sm" data-go="kpi" data-kpi="${k.id}">View</button>`}</td></tr>`}).join('')}
+  </tbody></table></div></div>
+  <div class="stack"><div class="card"><div class="card-h"><div><h2>My KPI status</h2></div></div>${statusDonut(mine,150)}</div>
+  <div class="card"><div class="card-h"><div><h2>Actions I own</h2></div><button class="btn sm ghost" data-go="actions">All</button></div>
+  ${CAS.filter(c=>c.owner==='Dr Meera Kulkarni').map(c=>`<div class="check"><span class="ok" style="--k:var(--a)">!</span><div style="flex:1"><b>${c.id} for ${c.k}</b><div class="muted small">${c.issue}, due ${c.due}</div></div><button class="btn sm" data-go="actionForm" data-ca="${c.id}">Update</button></div>`).join('')}</div></div></div></div>`;
+};
+
+V.entry = () => {
+  const k = K(S.entry), pct = k.formula.includes('÷') && k.unit.startsWith('%'), parts = k.formula.replace(' × 100','').split(' ÷ '), files=[...k.files,...S.newFiles];
+  return `<div class="wrap">${back('tasks','My KPIs')}<div class="ph"><div><h1>${k.id} ${esc(k.name)}</h1><p class="sub">Reporting year 2025/26 · Target ${tgt(k)} · ${dirLabel(k.dir)}</p></div>${st(k.status)}</div>
+  ${k.status==='returned'?banner('<b>Reviewer note:</b> '+esc(k.returnReason),'r'):''}
+  <div class="grid g21 entry-grid"><div class="card">
+    <div class="card-h"><div><h2>Annual figures</h2><p>Enter totals for the complete year. The platform calculates the rate, so enter counts, never a percentage.</p></div></div>
+    ${pct?`<div class="grid g2"><div class="field"><label for="num">${esc(cap1(parts[0]))}</label><input class="input" id="num" inputmode="decimal" value="${k.num??''}" placeholder="For example 960"></div>
+    <div class="field"><label for="den">${esc(cap1(parts[1]||'Denominator'))}</label><input class="input" id="den" inputmode="decimal" value="${k.den??''}" placeholder="For example 1,200"></div></div>`
+    :`<div class="field"><label for="act">Actual value (${esc(k.unit)})</label><input class="input" id="act" inputmode="decimal" value="${k.actual??''}"></div>`}
+    <div id="calcErr" class="err" style="margin:-4px 0 12px"></div>
+    <div class="field"><label>Evidence</label><div class="drop" data-addfile tabindex="0" role="button">${ic('up')}Add evidence file or link</div><span class="hint">PDF, Excel, image or a link to an approved repository. Each file is hashed when uploaded.</span>
+    <div id="files">${files.map(f=>`<div class="file"><div class="fi">PDF</div><div class="meta"><b>${f.n}</b><span>${f.s} · SHA 256 ${f.h}…</span></div><span class="chip k-g">Hashed</span></div>`).join('')}</div></div>
+    <div class="field"><label for="note">Note for reviewer</label><textarea class="input" id="note" placeholder="Anything the reviewer should know, such as a change in data source"></textarea></div>
+    <div id="subErr" class="err"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" data-toast="Draft saved">Save draft</button><button class="btn pri" data-submit>${ic('check')}Submit for review</button></div>
+  </div>
+  <div class="stack"><div class="calc" id="calc"></div>
+  <div class="card"><div class="card-h"><div><h2>Score bands</h2><p>Achievement maps to a share of ${k.alloc} points</p></div></div>
+  ${hbars(S.bands.slice(0,4).map((b,i)=>({l:`${b[0]}%${i?' to '+(S.bands[i-1][0]-1)+'%':' and above'}`,v:b[1],c:['var(--g)','var(--c4)','var(--a)','var(--r)'][i]})),{marker:null,fmt:v=>v+'%'})}</div></div></div></div>`;
+};
+function liveCalc(){
+  const k=K(S.entry), box=document.getElementById('calc'); if(!box) return null;
+  const n=document.getElementById('num'), d=document.getElementById('den'), a=document.getElementById('act'), err=document.getElementById('calcErr');
+  let actual=null; err.textContent='';
+  if(n){const nv=parseFloat(n.value.replace(/,/g,'')), dv=parseFloat(d.value.replace(/,/g,''));
+    if(d.value!=='' && !(dv>0)) err.textContent='Incomplete: the denominator must be above zero. A zero denominator is never scored as 0% or 100%.';
+    else if(!isNaN(nv)&&dv>0){ if(nv>dv) err.textContent='Numerator is higher than denominator. Please check both figures.'; actual=nv/dv*100; }}
+  else if(a && a.value!=='') actual=parseFloat(a.value);
+  const c = calc({...k,actual});
+  box.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1"><b>Live calculation</b>${actual==null?'<span class="hchip">Waiting for figures</span>':`<span class="hchip"><i style="background:${{g:'#34D399',a:'#FBBF24',r:'#F87171'}[c.rag]}"></i>${RAGN[c.rag]}</span>`}</div>
+  <div style="display:flex;justify-content:center;position:relative;z-index:1;margin:6px 0">${gauge(actual==null?0:c.cap,{size:220,dark:true,sub:'% of target',empty:actual==null})}</div>
+  <div class="row"><span>Actual</span><b>${actual==null?'–':fv(k,Math.round(actual*10)/10)}</b></div>
+  <div class="row"><span>Target</span><b>${tgt(k)}</b></div>
+  <div class="row"><span>Band</span><b>${c.band==null?'–':c.band*100+'%'}</b></div>
+  <div class="row"><span>Score</span><b>${c.earned==null?'–':f1(c.earned)+' of '+k.alloc}</b></div>
+  ${actual!=null&&c.rag!=='g'?`<div class="small" style="margin-top:10px;color:#FDE68A;position:relative;z-index:1">A corrective action will be raised for ${RAGN[c.rag]} results.</div>`:''}`;
+  if(!box.dataset.once){box.dataset.once=1;animateCounts(box);}else box.classList.add('noanim');
+  return actual;
+}
+
+V.review = () => {
+  const q = KPIS.filter(k=>k.status==='submitted');
+  const ages=[{l:'Under 1 day',v:1,c:'var(--g)'},{l:'1 to 2 days',v:2,c:'var(--c1)'},{l:'3 to 5 days',v:q.length>3?1:0,c:'var(--a)'},{l:'Over 5 days',v:0,c:'var(--r)'}];
+  return `<div class="wrap"><div class="ph"><div><h1>Review queue</h1><p class="sub">${q.length} submissions waiting. Check figures against evidence before verifying.</p></div></div>
+  <div class="grid g4">${statCard({l:'Waiting',v:q.length,d:0,icon:'hourglass'})}${statCard({l:'Returned this week',v:1,d:0,icon:'alert',k:'var(--a)'})}${statCard({l:'Verified this year',v:KPIS.filter(k=>k.status==='approved').length,d:0,icon:'check',k:'var(--g)'})}${statCard({l:'Average review time',v:1.6,suffix:'days',icon:'clock',k:'var(--c3)',delta:-0.4,foot:'faster than last month'})}</div>
+  <div class="grid g21 mt"><div class="card"><div class="card-h"><div><h2>Waiting for review</h2></div></div><div class="tw"><table><thead><tr><th>ID</th><th>Performance indicator</th><th>Owner</th><th class="num">Actual</th><th>RAG</th><th>Evidence</th><th></th></tr></thead><tbody>
+  ${q.map(k=>`<tr class="click" data-go="reviewItem" data-review="${k.id}"><td class="kid">${k.id}</td><td><b style="font-weight:600">${esc(k.name)}</b></td><td>${esc(k.owner)}</td><td class="num">${fv(k,k.actual)}</td><td>${chip(calc(k).rag)}</td><td>${k.files.length} file${k.files.length===1?'':'s'}</td><td><button class="btn sm pri" data-go="reviewItem" data-review="${k.id}">Review</button></td></tr>`).join('')||`<tr><td colspan="7"><div class="empty"><div class="ei">${ic('check')}</div><b>Queue is clear</b><p class="muted small">New submissions appear here.</p></div></td></tr>`}
+  </tbody></table></div></div>
+  <div class="card"><div class="card-h"><div><h2>Queue age</h2><p>How long submissions have waited</p></div></div>${donut(ages,{size:150,center:String(q.length),sub:'waiting'})}</div></div></div>`;
+};
+
+V.reviewItem = () => {
+  const k=K(S.review), c=calc(k), pv=PREV[k.id]||[null,null];
+  return `<div class="wrap">${back('review','Review queue')}<div class="ph"><div><h1>Review ${k.id} ${esc(k.name)}</h1><p class="sub">Submitted by ${esc(k.owner)} on 30 Sep 2026</p></div>${chip(c.rag)}</div>
+  <div class="grid g3 collapse"><div class="card"><div class="card-h"><div><h2>Submitted figures</h2></div></div><dl class="kv">
+    ${k.num!=null?`<dt>Numerator</dt><dd>${k.num}</dd><dt>Denominator</dt><dd>${k.den}</dd>`:''}
+    <dt>Actual</dt><dd>${fv(k,k.actual)}</dd><dt>Target</dt><dd>${tgt(k)}</dd><dt>Score</dt><dd>${f1(c.earned)} of ${k.alloc}</dd><dt>Owner note</dt><dd>Figures from the annual register, closed 31 Aug 2026.</dd></dl></div>
+  <div class="card" style="text-align:center"><div class="card-h" style="text-align:left"><div><h2>Achievement</h2></div></div>${gauge(c.cap,{size:210,sub:'% of target'})}</div>
+  <div class="card"><div class="card-h"><div><h2>Against last year</h2><p>Sudden jumps deserve a closer look</p></div></div>${vcols([{l:'2024/25',v:pv[1]||0,t:fv(k,pv[1]),c:'var(--line2)'},{l:'2025/26',v:k.actual,t:fv(k,k.actual),c:RAGC[c.rag]}],{h:180,marker:{v:k.target,l:'Target'},max:Math.max(k.target,k.actual,pv[1]||0)*1.3})}</div></div>
+  <div class="grid g2 mt"><div class="card"><div class="card-h"><div><h2>Evidence</h2></div></div>${k.files.map(f=>`<div class="file"><div class="fi">PDF</div><div class="meta"><b>${f.n}</b><span>${f.s} · hash matched</span></div><button class="btn sm" data-toast="Preview opens in the full build">Open</button></div>`).join('')}</div>
+  <div class="card"><div class="card-h"><div><h2>Reviewer checklist</h2><p>Tick every item to verify</p></div><span id="chkProg" class="tag">0 of 4</span></div>
+    ${['Figures match the evidence','Numerator and denominator use the same period','Evidence is from an approved source','Calculation method matches the KPI master'].map(t=>`<label class="check"><input type="checkbox" data-chk> <span>${t}</span></label>`).join('')}</div></div>
+  <div class="card mt" style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;align-items:center"><span class="muted small" style="margin-right:auto">Self approval is blocked; this KPI routes to the Director after you verify.</span><button class="btn warn" data-modal="return">Return to owner</button><button class="btn pri" id="verifyBtn" data-verify disabled>${ic('check')}Verify and send to Director</button></div></div>`;
+};
+
+V.approve = () => {
+  const ps=paramScores(), s=schcScore();
+  const pend=KPIS.filter(k=>['draft','overdue','returned'].includes(k.status)), sub=KPIS.filter(k=>k.status==='submitted');
+  const checks=[[pend.length===0,`${KPIS.length-pend.length} of ${KPIS.length} KPIs submitted`,pend.map(k=>k.id).join(', ')+' still with owners'],
+    [sub.length===0,'All submissions verified',`${sub.length} waiting with reviewer`],[true,'Evidence attached for every submitted KPI',''],[false,'Corrective actions have a root cause','CA.018 has no root cause yet']];
+  const met=checks.filter(c=>c[0]).length;
+  return `<div class="wrap"><div class="ph"><div><h1>Approve SCHC scorecard</h1><p class="sub">Review the year, then approve. Locking makes 2025/26 read only.</p></div>
+  <div class="acts">${S.yearLocked?`<span class="chip k-g">${ic('lock')} Year locked</span>`:S.scorecardApproved?'<span class="chip k-g">Scorecard approved</span>':'<span class="chip k-a">Awaiting approval</span>'}</div></div>
+  <div class="grid g3 collapse"><div class="card"><div class="card-h"><div><h2>Readiness</h2><p>${met} of ${checks.length} checks met</p></div>${ring(met/checks.length*100,{size:58,th:7,color:met===checks.length?'var(--g)':'var(--a)'})}</div>
+    ${checks.map(c=>`<div class="check"><span class="ok" style="--k:${c[0]?'var(--g)':'var(--a)'}">${c[0]?'✓':'!'}</span><div><b>${c[1]}</b>${c[0]?'':`<div class="muted small">${c[2]}</div>`}</div></div>`).join('')}</div>
+  <div class="card" style="text-align:center"><div class="card-h" style="text-align:left"><div><h2>Institute score</h2><p>Provisional</p></div>${chip(ragOf(s))}</div>${gauge(s,{size:240})}</div>
+  <div class="card"><div class="card-h"><div><h2>Score build up</h2></div></div>${pie([...ps.map(p=>({l:p.id,v:p.score,c:p.c})),{l:'Lost',v:100-s,c:'var(--line2)'}],{size:150})}</div></div>
+  <div class="card mt"><div class="card-h"><div><h2>Scorecard</h2></div></div><div class="tw"><table><thead><tr><th>Parameter</th><th class="num">Weight</th><th>Achievement</th><th class="num">Score</th><th>RAG</th><th class="num">Pending</th></tr></thead><tbody>
+  ${ps.map(p=>`<tr class="click" data-go="inst" data-pf="${p.id}"><td><b>${p.id}</b> ${esc(p.name)}</td><td class="num">${p.w}</td><td style="white-space:nowrap">${mini(p.pct,p.rag)}${f1(p.pct)}%</td><td class="num"><b>${f1(p.score)}</b></td><td>${chip(p.rag)}</td><td class="num">${p.pend||'–'}</td></tr>`).join('')}
+  <tr><td><b>Total</b></td><td class="num">100</td><td></td><td class="num"><b>${f1(s)}</b></td><td>${chip(ragOf(s))}</td><td class="num">${pend.length}</td></tr></tbody></table></div></div>
+  <div class="card mt"><div class="field"><label for="dnote">Director remarks</label><textarea class="input" id="dnote" placeholder="Context for the Provost and Board, for example why P5 is below target"></textarea></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap"><button class="btn" data-go="review" data-as="reviewer">See pending reviews</button>
+  <button class="btn pri" data-modal="approve" ${S.scorecardApproved?'disabled':''}>${ic('stamp')}Approve scorecard</button>
+  <button class="btn" data-modal="lock" ${!S.scorecardApproved||S.yearLocked?'disabled':''}>${ic('lock')}Lock year</button></div></div></div>`;
+};
+
+V.actions = () => {
+  const col={'Open':'var(--r)','Planned':'var(--c3)','In progress':'var(--a)','Closure check':'var(--g)'};
+  const byP=PARAMS.map(p=>({l:p.id,v:CAS.filter(c=>c.k.startsWith(p.id)).length,c:p.c})).filter(x=>x.v);
+  return `<div class="wrap">${readOnly()}<div class="ph"><div><h1>Corrective actions</h1><p class="sub">Raised automatically for Amber or Red results. Each needs a cause, an owner and closure evidence.</p></div>
+  <div class="acts"><div class="seg-ctl"><button class="${S.caView==='board'?'on':''}" data-caview="board">Board</button><button class="${S.caView==='list'?'on':''}" data-caview="list">List</button></div>${S.role!=='board'?`<button class="btn pri" data-go="actionForm" data-ca="new">${ic('plus')}Raise action</button>`:''}</div></div>
+  <div class="grid g3 collapse"><div class="card"><div class="card-h"><div><h2>By status</h2></div></div>${donut(CA_STATUSES.map(s=>({l:s,v:CAS.filter(c=>c.status===s).length,c:col[s]})),{size:150,center:String(CAS.length),sub:'actions'})}</div>
+  <div class="card"><div class="card-h"><div><h2>By parameter</h2></div></div>${pie(byP,{size:150})}</div>
+  <div class="card"><div class="card-h"><div><h2>Age in days</h2><p>Since the action was raised</p></div></div>${hbars(CAS.map(c=>({l:c.id,s:c.owner,v:c.age,c:c.age>45?'var(--r)':c.age>25?'var(--a)':'var(--g)'})),{marker:45,max:70,fmt:v=>v+'d'})}</div></div>
+  <div class="mt">${S.caView==='board'?`<div class="board">${CA_STATUSES.map(s=>`<div class="col"><h3>${s}<span class="tag">${CAS.filter(c=>c.status===s).length}</span></h3>
+    ${CAS.filter(c=>c.status===s).map(c=>`<div class="kc" style="--k:${col[s]}" data-go="actionForm" data-ca="${c.id}"><b>${c.issue}</b><span class="small muted">${c.id} · ${c.k}</span><div class="row"><span>${c.owner}</span>${chip(calc(K(c.k)).rag)}</div><div class="row"><span>${/\d/.test(c.due)?'Due '+c.due:'Due date not set'}</span><span>${c.age}d</span></div></div>`).join('')}</div>`).join('')}</div>`:
+  `<div class="card"><div class="tw"><table><thead><tr><th>Action</th><th>KPI</th><th>Issue</th><th class="hide-n">Root cause</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody>
+  ${CAS.map(c=>`<tr class="click" data-go="actionForm" data-ca="${c.id}"><td class="kid">${c.id}</td><td style="white-space:nowrap">${c.k} ${chip(calc(K(c.k)).rag)}</td><td>${c.issue}</td><td class="hide-n muted">${c.cause}</td><td>${c.owner}</td><td style="white-space:nowrap">${c.due}</td><td><span class="chip" style="--k:${col[c.status]}">${c.status}</span></td></tr>`).join('')}
+  </tbody></table></div></div>`}</div></div>`;
+};
+
+V.actionForm = () => {
+  const c = S.actionFor==='new'?{id:'New action',k:'P2.04',issue:'',cause:'',owner:'',due:'',status:'Open'}:CAS.find(x=>x.id===S.actionFor)||CAS[0];
+  const k=K(c.k), cc=calc(k);
+  return `<div class="wrap">${back('actions','Corrective actions')}<div class="ph"><div><h1>${c.id}</h1><p class="sub">${k.id} ${esc(k.name)}, actual ${fv(k,k.actual)} against ${tgt(k)}</p></div>${chip(cc.rag)}</div>
+  <div class="grid g21"><div class="card">
+    <div class="field"><label>Issue</label><input class="input" value="${esc(c.issue)}" placeholder="What fell short"></div>
+    <div class="field"><label>Root cause</label><textarea class="input" placeholder="Why it happened">${esc(c.cause)}</textarea></div>
+    <div class="field"><label>Action plan</label><textarea class="input" placeholder="What will change, and how progress will be checked">${c.id==='CA.014'?'Track every external referral in a shared register with weekly follow up calls until closure.':''}</textarea></div>
+    <div class="grid g3"><div class="field"><label>Owner</label><select class="input"><option>${esc(c.owner||'Choose owner')}</option><option>Dr Meera Kulkarni</option><option>Anil Gokhale</option></select></div>
+    <div class="field"><label>Target closure</label><input class="input" value="${esc(c.due)}" placeholder="dd mmm yyyy"></div>
+    <div class="field"><label>Status</label><select class="input">${[...CA_STATUSES,'Closed'].map(s=>`<option ${s===c.status?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    <div class="field"><label>Closure evidence</label><div class="drop" data-toast="Closure evidence added">${ic('up')}Add closure evidence</div><span class="hint">An action closes only after the reviewer checks this evidence.</span></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" data-go="actions">Cancel</button><button class="btn pri" data-toast="Corrective action saved" data-go="actions">Save action</button></div>
+  </div><div class="stack"><div class="card" style="text-align:center"><div class="card-h" style="text-align:left"><div><h2>Current achievement</h2></div></div>${gauge(cc.cap||0,{size:210,sub:'% of target'})}</div>
+  <div class="card"><div class="card-h"><div><h2>Progress</h2></div></div><ul class="tl"><li style="--k:var(--r)"><b>Raised automatically</b><span>When ${k.id} was approved in ${RAGN[cc.rag]}</span></li><li><b>Owner assigned</b><span>${esc(c.owner||'Pending')}</span></li><li style="--k:var(--p)"><b>Next review</b><span>Monthly review meeting, 05 Nov 2026</span></li></ul></div></div></div></div>`;
+};
+
+const REPORTS = [['summary','Dashboard summary','Scores, RAG and coverage on one page','grid'],['param','Parameter wise','Every parameter with its KPIs','layers'],['owner','Owner accountability','What each owner submitted','users'],['evidence','Evidence submission','Evidence status per KPI','file'],['ca','Corrective action','Open actions with due dates','alert'],['annual','Annual PDF report','Formal report for Provost and Board','box'],['excel','Excel export','Full year data for analysis','down']];
+V.reports = () => {
+  const r=S.report, ps=paramScores(), s=schcScore(); let prev='';
+  if(r==='summary') prev=`<div class="grid g2"><div style="text-align:center">${gauge(s,{size:230,sub:'SCHC score'})}</div><div>${ragDonut(KPIS,150)}</div></div><div class="mt">${hbars(ps.map(p=>({l:p.id+' '+p.short,v:p.pct,c:RAGC[p.rag]})))}</div>`;
+  else if(r==='param'||r==='excel') prev=`${r==='excel'?`<div class="tabs"><button class="on">Scorecard</button><button>KPI data</button><button>Evidence</button><button>Actions</button><button>Audit</button></div>`:''}<div class="tw"><table><thead><tr><th>Parameter</th><th class="num">KPIs</th><th class="num">Weight</th><th>Achievement</th><th class="num">Score</th><th>RAG</th></tr></thead><tbody>${ps.map(p=>`<tr><td><b>${p.id}</b> ${esc(p.name)}</td><td class="num">${p.count}</td><td class="num">${p.w}</td><td style="white-space:nowrap">${mini(p.pct,p.rag)}${f1(p.pct)}%</td><td class="num">${f1(p.score)}</td><td>${chip(p.rag)}</td></tr>`).join('')}<tr><td><b>Total</b></td><td class="num">${KPIS.length}</td><td class="num">100</td><td></td><td class="num"><b>${f1(s)}</b></td><td>${chip(ragOf(s))}</td></tr></tbody></table></div>`;
+  else if(r==='owner'){const g={};KPIS.forEach(k=>{g[k.owner]=g[k.owner]||{n:0,s:0};g[k.owner].n++;if(!['draft','overdue'].includes(k.status))g[k.owner].s++});
+    prev=hbars(Object.entries(g).sort((a,b)=>b[1].n-a[1].n).map(([n,v])=>({l:n,s:`${v.s} of ${v.n} submitted`,v:v.s/v.n*100,c:v.s===v.n?'var(--g)':v.s/v.n>=.5?'var(--a)':'var(--r)'})),{marker:null,fmt:v=>Math.round(v)+'%'});}
+  else if(r==='evidence'){const w=KPIS.filter(k=>k.files.length).length;prev=`<div class="grid g12"><div>${donut([{l:'Verified',v:w,c:'var(--g)'},{l:'Awaiting',v:KPIS.length-w,c:'var(--p)'}],{size:150,center:String(Math.round(w/KPIS.length*100)),sub:'% complete'})}</div><div class="tw"><table><thead><tr><th>ID</th><th>Indicator</th><th>Hash check</th><th>Status</th></tr></thead><tbody>${KPIS.slice(0,10).map(k=>`<tr><td class="kid">${k.id}</td><td>${esc(k.name)}</td><td>${k.files.length?'<span class="chip k-g">Matched</span>':'<span class="chip k-p">Awaiting</span>'}</td><td>${st(k.status)}</td></tr>`).join('')}</tbody></table></div></div>`;}
+  else if(r==='ca') prev=`<div class="tw"><table><thead><tr><th>Action</th><th>KPI</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody>${CAS.map(c=>`<tr><td class="kid">${c.id}</td><td>${c.k}</td><td>${c.owner}</td><td>${c.due}</td><td>${c.status}</td></tr>`).join('')}</tbody></table></div>`;
+  else if(r==='annual') prev=`<div style="max-width:470px;margin:6px auto;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow-lg)"><div style="background:var(--hero);color:#fff;padding:26px 28px"><div class="small" style="color:#C4D5F2">Symbiosis International University</div><h2 style="font-size:22px;margin-top:6px;color:#fff">SCHC annual KPI report</h2><div class="small" style="color:#C4D5F2">Reporting year 2025/26</div></div>
+    <div style="padding:20px 28px;text-align:center">${gauge(s,{size:200})}${ribbon(ps,{click:false})}<p class="muted small" style="margin-top:16px;text-align:left">Contents: summary, parameter results, KPI tables, evidence register, corrective actions, Director remarks and sign off.</p></div></div>`;
+  const cur=REPORTS.find(x=>x[0]===r);
+  return `<div class="wrap">${readOnly()}<div class="ph"><div><h1>Reports</h1><p class="sub">Every report reads from the same scoring engine, so figures always match the dashboard.</p></div>
+  <div class="acts"><select class="yearpick"><option>SCHC</option><option>SCEW</option><option>All institutes</option></select><select class="yearpick"><option>2025/26</option><option>2024/25</option></select></div></div>
+  <div class="grid g12"><div class="card" style="padding:10px">${REPORTS.map(x=>`<button class="rolecard ${x[0]===r?'sel':''}" style="width:100%;margin:4px 0" data-report="${x[0]}"><span class="stat" style="padding:0;border:0;box-shadow:none;background:none"><span class="ico">${ic(x[3])}</span></span><span class="rt"><b>${x[1]}</b><span>${x[2]}</span></span></button>`).join('')}</div>
+  <div class="card"><div class="card-h"><div><h2>${cur[1]}</h2><p>SCHC · 2025/26 · generated 04 Oct 2026</p></div>
+  <div style="display:flex;gap:8px"><button class="btn sm" data-toast="Excel export prepared">${ic('down')}Excel</button><button class="btn sm pri" data-toast="PDF report prepared">${ic('down')}PDF</button></div></div>${prev}</div></div></div>`;
+};
+
+V.archive = () => `<div class="wrap"><div class="ph"><div><h1>Archive</h1><p class="sub">Locked years are read only. Changes after locking need a formal correction approved by the Director.</p></div></div>
+  <div class="grid g12"><div class="card"><div class="card-h"><div><h2>SCHC by year</h2></div></div>${vcols([{l:'2023/24',v:71.2,t:'71.2',c:'var(--c7)'},{l:'2024/25',v:74,t:'74.0',c:'var(--c2)'},{l:'2025/26',v:+f1(schcScore()),t:f1(schcScore()),c:'var(--c1)'}],{h:210,max:100,marker:{v:S.rag.g,l:'Green '+S.rag.g}})}</div>
+  <div class="card"><div class="tw"><table><thead><tr><th>Year</th><th>Institute</th><th class="num">Score</th><th>RAG</th><th>Approved by</th><th>Lock</th><th></th></tr></thead><tbody>
+  <tr><td><b>2025/26</b></td><td>SCHC</td><td class="num">${f1(schcScore())}</td><td>${chip(ragOf(schcScore()))}</td><td>${S.scorecardApproved?'Dr Sunita Mehra':'Pending'}</td><td>${S.yearLocked?`<span class="chip k-g">${ic('lock')} Locked</span>`:'<span class="chip k-b">Open</span>'}</td><td><button class="btn sm" data-go="inst">Open</button></td></tr>
+  <tr><td><b>2024/25</b></td><td>SCHC</td><td class="num">74.0</td><td>${chip('a')}</td><td>Dr Sunita Mehra</td><td><span class="chip k-g">${ic('lock')} 30 Nov 2025</span></td><td><button class="btn sm" data-toast="Opens the 2024/25 snapshot in read only mode">Open</button></td></tr>
+  <tr><td><b>2024/25</b></td><td>SCEW</td><td class="num">77.5</td><td>${chip('a')}</td><td>Dr Pooja Shah</td><td><span class="chip k-g">${ic('lock')} 30 Nov 2025</span></td><td><button class="btn sm" data-toast="Opens the 2024/25 snapshot in read only mode">Open</button></td></tr>
+  <tr><td><b>2023/24</b></td><td>SCHC</td><td class="num">71.2</td><td>${chip('a')}</td><td>Dr Sunita Mehra</td><td><span class="chip k-g">${ic('lock')} 29 Nov 2024</span></td><td><button class="btn sm" data-toast="Opens the 2023/24 snapshot in read only mode">Open</button></td></tr>
+  </tbody></table></div></div></div></div>`;
+
+const auditRows = () => AUDIT.filter(a=>S.auditF==='All'||a[2]===S.auditF).map(a=>`<tr><td style="white-space:nowrap">${a[0]}</td><td>${a[1]}</td><td><b>${a[2]}</b></td><td class="kid">${a[3]}</td><td>${a[4]}</td><td class="muted">${a[5]||'–'}</td><td class="hide-n muted">10.12.4.${(a[0].length*7+a[1].length)%200}</td></tr>`).join('');
+V.audit = () => {
+  const types=['All',...new Set(AUDIT.map(a=>a[2]))];
+  return `<div class="wrap"><div class="ph"><div><h1>Audit log</h1><p class="sub">Every change is recorded with who, when, what changed and why. Entries cannot be edited or deleted.</p></div>
+  <div class="acts"><button class="btn" data-toast="Audit export prepared">${ic('down')}Export</button></div></div>
+  <div class="grid g4">${statCard({l:'Events this week',v:AUDIT.length,d:0,icon:'clock'})}${statCard({l:'Framework changes',v:1,d:0,icon:'layers',k:'var(--c3)'})}${statCard({l:'Returns',v:1,d:0,icon:'alert',k:'var(--a)'})}${statCard({l:'Integrity checks',v:'100%',icon:'shield',k:'var(--g)',foot:'All hashes matched'})}</div>
+  <div class="card mt"><div class="filters" style="margin-bottom:14px">${types.map(t=>`<button class="pill ${S.auditF===t?'on':''}" data-af="${t}">${t}</button>`).join('')}</div>
+  <div class="tw"><table><thead><tr><th>When</th><th>User</th><th>Action</th><th>Item</th><th>Change</th><th>Reason</th><th class="hide-n">IP</th></tr></thead><tbody>${auditRows()}</tbody></table></div></div></div>`;
+};
+
+V.year = () => {
+  const owners={};KPIS.forEach(k=>{owners[k.owner]=owners[k.owner]||{n:0,s:0};owners[k.owner].n++;if(!['draft','overdue'].includes(k.status))owners[k.owner].s++});
+  const winPct=Math.round((TODAY-new Date('2026-09-01'))/(new Date('2026-10-31')-new Date('2026-09-01'))*100);
+  return `<div class="wrap"><div class="hero"><div><h1>Reporting year 2025/26</h1><p class="sub">Open for entry from 01 Sep to 31 Oct 2026 · KPI master SCHC v1.2</p>
+  <div style="margin-top:16px;max-width:460px"><div style="display:flex;justify-content:space-between;font-size:12px;color:#C4D5F2;margin-bottom:6px"><span>01 Sep</span><span>Today, ${winPct}% of window used</span><span>31 Oct</span></div><div class="prog" style="background:rgba(255,255,255,.18);height:10px"><i class="grow" style="width:${winPct}%;background:linear-gradient(90deg,#93C5FD,#fff)"></i></div></div>
+  <div class="chips"><button class="btn sm" data-toast="Reminders sent to 4 owners with pending KPIs">${ic('bell')}Send reminders</button><button class="btn sm" data-toast="Bulk assignment template downloaded">Assign in bulk</button></div></div>
+  <div style="text-align:center">${ring(Math.round((KPIS.length-3)/KPIS.length*100),{size:150,th:14,color:'#93C5FD'}).replace('fill="var(--ink)"','fill="#fff"').replace('stroke="var(--tint)"','stroke="rgba(255,255,255,.18)"')}<div class="small" style="color:#C4D5F2;margin-top:6px">KPIs with data</div></div></div>
+  <div class="grid g4 overlap">${statCard({l:'Institutes',v:3,d:0,icon:'inst',foot:'DSRW framework awaited'})}${statCard({l:'SCHC KPIs assigned',v:KPIS.length,d:0,icon:'list',k:'var(--c4)',foot:'Every KPI has an owner'})}${statCard({l:'Owners',v:Object.keys(owners).length,d:0,icon:'users',k:'var(--c3)'})}${statCard({l:'Days left',v:daysLeft(),d:0,icon:'cal',k:'var(--a)',foot:'Closes 31 Oct 2026'})}</div>
+  <div class="grid g2 mt"><div class="card"><div class="card-h"><div><h2>Owner progress</h2><p>Share of assigned KPIs submitted</p></div></div>${hbars(Object.entries(owners).map(([n,v])=>({l:n,v:v.s/v.n*100,c:v.s===v.n?'var(--g)':v.s/v.n>=.5?'var(--a)':'var(--r)',s:`${v.s} of ${v.n}`})),{marker:null,fmt:v=>Math.round(v)+'%'})}</div>
+  <div class="card"><div class="card-h"><div><h2>Year setup</h2></div></div><div class="grid g2">
+    <div class="field"><label>Reporting year</label><select class="input"><option>2025/26</option><option>2026/27</option></select></div>
+    <div class="field"><label>Data period</label><input class="input" value="01 Jun 2025 to 31 May 2026"></div>
+    <div class="field"><label>Entry opens</label><input class="input" value="01 Sep 2026"></div>
+    <div class="field"><label>Entry closes</label><input class="input" value="31 Oct 2026"></div></div>
+    <h3 style="margin:6px 0 10px">Assignments</h3><div class="tw"><table style="min-width:520px"><thead><tr><th>ID</th><th>Owner</th><th>Backup</th><th>Reviewer</th></tr></thead><tbody>
+    ${KPIS.slice(0,6).map(k=>`<tr><td class="kid">${k.id}</td><td>${esc(k.owner)}</td><td class="muted">${k.owner==='Dr Meera Kulkarni'?'Dr Kavita Joshi':'Dr Meera Kulkarni'}</td><td>Dr Arvind Rao</td></tr>`).join('')}</tbody></table></div></div></div></div>`;
+};
+
+const masterRows = () => KPIS.filter(k=>(S.pf==='all'||k.p===S.pf)&&(!S.q||(k.id+k.name+k.role).toLowerCase().includes(S.q.toLowerCase()))).map(k=>`<tr><td class="kid">${k.id}</td><td><b style="font-weight:600">${esc(k.name)}</b></td><td class="muted small">${esc(k.formula)}</td><td style="white-space:nowrap">${dirLabel(k.dir)}</td><td class="num">${tgt(k)}</td><td class="num">${k.alloc}</td><td class="small">${esc(k.role)}</td></tr>`).join('');
+V.master = () => `<div class="wrap"><div class="ph"><div><h1>KPI master</h1><p class="sub">Locked for routine users. Any change needs Director approval and creates a new version.</p></div>
+  <div class="acts"><button class="btn" data-toast="Import template downloaded">${ic('up')}Import from Excel</button><button class="btn pri" data-modal="change">Request framework change</button></div></div>
+  <div class="tabs">${['SCHC','SCEW','DSRW'].map(t=>`<button class="${S.adminTab===t?'on':''}" data-tab="${t}">${t}</button>`).join('')}</div>
+  ${S.adminTab==='DSRW'?`<div class="card"><div class="empty"><div class="ei">${ic('layers')}</div><h2>Load the DSRW framework</h2><p class="muted">Import the approved framework from Excel, or add parameters and KPIs one at a time.</p><button class="btn pri" data-toast="Import template downloaded">${ic('up')}Import framework</button></div></div>`:
+  S.adminTab==='SCEW'?`${banner('SCEW framework v0.9 is a draft. Publish it once the Head of SCEW approves.','a')}<div class="grid g12"><div class="card"><div class="card-h"><div><h2>Weights</h2></div></div>${pie(SCEW.map(d=>({l:d.id,v:d.w,c:d.c})),{size:160})}</div><div class="card"><div class="tw"><table><thead><tr><th>Domain</th><th>Name</th><th class="num">Weight</th><th>Status</th></tr></thead><tbody>${SCEW.map(d=>`<tr><td class="kid">${d.id}</td><td>${d.name}</td><td class="num">${d.w}</td><td><span class="chip k-a">Draft</span></td></tr>`).join('')}</tbody></table></div></div></div>`:
+  `<div class="grid g4">${statCard({l:'Version',v:'v1.2',icon:'layers',foot:'Approved 26 Sep 2026'})}${statCard({l:'Parameters',v:6,d:0,icon:'pie',k:'var(--c3)'})}${statCard({l:'KPIs',v:KPIS.length,d:0,icon:'list',k:'var(--c4)'})}${statCard({l:'Status',v:'Locked',icon:'lock',k:'var(--g)',foot:'Changes need approval'})}</div>
+  <div class="card mt"><div class="card-h"><div class="filters"><button class="pill ${S.pf==='all'?'on':''}" data-pf="all">All</button>${PARAMS.map(p=>`<button class="pill ${S.pf===p.id?'on':''}" data-pf="${p.id}">${p.id}</button>`).join('')}</div>
+  <input class="input" style="max-width:240px" placeholder="Search the master" data-mq value="${esc(S.q)}"></div>
+  <div class="tw"><table><thead><tr><th>ID</th><th>Performance indicator</th><th>Formula</th><th>Direction</th><th class="num">Target</th><th class="num">Points</th><th>Default role</th></tr></thead><tbody id="masterBody">${masterRows()}</tbody></table></div></div>`}</div>`;
+
+V.weights = () => {
+  const tot = Object.values(S.weights).reduce((s,v)=>s+(+v||0),0);
+  return `<div class="wrap"><div class="ph"><div><h1>Parameters and weights</h1><p class="sub">SCHC weights must total 100. Changes apply from the next approved master version.</p></div>
+  <div class="acts"><button class="btn pri" id="wSend" data-toast="Change request sent to Director for approval" ${tot!==100?'disabled':''}>Send for approval</button></div></div>
+  ${banner('Weights shown are the revised set, 40:15:10:10:5:20. The original 50:10:10:5:5:20 set is awaiting a decision.','a')}
+  <div class="grid g2"><div class="card"><div class="card-h"><div><h2>Edit weights</h2><p>Type a value; the chart and score update as you go</p></div></div><div class="tw"><table style="min-width:420px"><thead><tr><th>ID</th><th>Parameter</th><th class="num">KPIs</th><th class="num">Weight</th></tr></thead><tbody>
+  ${PARAMS.map(p=>`<tr><td><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${p.c};margin-right:6px"></span><b>${p.id}</b></td><td>${esc(p.name)}</td><td class="num">${KPIS.filter(k=>k.p===p.id).length}</td><td class="num"><input class="input weightin" data-w="${p.id}" value="${S.weights[p.id]}" inputmode="numeric"></td></tr>`).join('')}
+  <tr><td></td><td><b>Total</b></td><td class="num">${KPIS.length}</td><td class="num"><b id="wtot" style="font-size:16px;color:${tot===100?'var(--g)':'var(--r)'}">${tot}</b></td></tr></tbody></table></div></div>
+  <div class="card"><div class="card-h"><div><h2>Weight distribution</h2><p>Projected institute score <b id="wscore">${f1(schcScore())}</b></p></div></div><div id="wpie">${pie(PARAMS.map(p=>({l:p.id+' '+p.short,v:+S.weights[p.id]||0,c:p.c})),{size:210})}</div></div></div></div>`;
+};
+
+V.rules = () => `<div class="wrap"><div class="ph"><div><h1>Scoring rules</h1><p class="sub">Shared by every institute. Changing a rule recalculates open years only; locked years keep their scores.</p></div>
+  <div class="acts"><button class="btn pri" data-toast="Rule change sent for approval">Send for approval</button></div></div>
+  <div class="grid g2"><div class="card"><div class="card-h"><div><h2>Graded score bands</h2><p>Achievement maps to a share of each KPI's points</p></div></div>
+  ${vcols(S.bands.slice().reverse().map((b,i)=>({l:b[0]+'%+',v:b[1]||2,t:b[1]+'%',c:['var(--r)','var(--r)','var(--a)','var(--c4)','var(--g)'][i]})),{h:210,max:115})}</div>
+  <div class="card"><div class="card-h"><div><h2>RAG thresholds</h2><p>Move the sliders to see how KPIs would be classified</p></div></div>
+  <div class="field"><label>Green from <b id="gv">${S.rag.g}</b>%</label><input type="range" min="60" max="100" value="${S.rag.g}" data-rag="g" style="accent-color:var(--g)"></div>
+  <div class="field"><label>Amber from <b id="av">${S.rag.a}</b>%</label><input type="range" min="40" max="95" value="${S.rag.a}" data-rag="a" style="accent-color:var(--a)"></div>
+  <div id="ragPrev">${ragDonut(KPIS,150)}</div></div></div>
+  <div class="card mt"><div class="card-h"><div><h2>Calculation safeguards</h2></div></div>
+  ${[['Zero or missing denominator is flagged as incomplete','Never treated as 0% or 100%'],['Annual rates use total numerator over total denominator','Never an average of monthly rates'],['Lower is better KPIs use target ÷ actual','Capped at 100% achievement'],['Approved entries are locked','Changes need a correction request and approval'],['Self approval is blocked','Submissions route to an alternate reviewer']].map(r=>`<div class="check"><span class="ok" style="--k:var(--g)">✓</span><div><b>${r[0]}</b><div class="muted small">${r[1]}</div></div></div>`).join('')}</div></div>`;
+
+const userRows = () => USERS.filter(u=>!S.q||u.join(' ').toLowerCase().includes(S.q.toLowerCase())).map(u=>`<tr><td><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:30px;height:30px;font-size:11px">${u[0].split(' ').filter(w=>w!=='Dr').map(w=>w[0]).join('').slice(0,2)}</span><b>${u[0]}</b></div></td><td class="muted">${u[1]}</td><td>${u[2]}</td><td>${u[3]}</td><td>${u[5]==='On'?'<span class="chip k-g">On</span>':'<span class="chip k-p">Pending</span>'}</td><td>${u[4]==='Active'?'<span class="chip k-b">Active</span>':'<span class="chip k-a">Invited</span>'}</td></tr>`).join('');
+V.users = () => {
+  const roles=['Data owner','Reviewer','Executive approver','Leadership','Board (read only)','Admin'], cols=['var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)','var(--c6)'];
+  const mfa=USERS.filter(u=>u[5]==='On').length;
+  return `<div class="wrap"><div class="ph"><div><h1>Users and roles</h1><p class="sub">Access follows role and institute. Users sign in with their SIU account.</p></div>
+  <div class="acts"><button class="btn pri" data-modal="invite">${ic('plus')}Invite user</button></div></div>
+  <div class="grid g3 collapse"><div class="card"><div class="card-h"><div><h2>Users by role</h2></div></div>${donut(roles.map((r,i)=>({l:r,v:USERS.filter(u=>u[2]===r).length,c:cols[i]})),{size:150,center:String(USERS.length),sub:'users'})}</div>
+  <div class="card"><div class="card-h"><div><h2>Users by institute</h2></div></div>${pie(['SCHC','SCEW','DSRW','All institutes','Platform'].map((n,i)=>({l:n,v:USERS.filter(u=>u[3]===n).length,c:cols[i]})),{size:150})}</div>
+  <div class="card" style="text-align:center"><div class="card-h" style="text-align:left"><div><h2>Multi factor coverage</h2><p>Required for approvers and admins</p></div></div>${ring(mfa/USERS.length*100,{size:130,th:13,color:'var(--g)'})}<p class="muted small">${USERS.length-mfa} users still to enrol</p></div></div>
+  <div class="card mt"><div class="card-h"><h2>All users</h2><input class="input" style="max-width:240px" placeholder="Search users" data-uq value="${esc(S.q)}"></div><div class="tw"><table><thead><tr><th>Name</th><th>Designation</th><th>Role</th><th>Institute</th><th>MFA</th><th>Status</th></tr></thead><tbody id="userBody">${userRows()}</tbody></table></div></div></div>`;
+};
+
+/* ================= Login ================= */
+function loginView(){
+  const s=schcScore(), n=ragCounts();
+  return `<div class="login"><div class="login-l"><div class="brand" style="padding:0">${logo()}<div><b>Symbiosis International University</b><span>KPI Accountability Platform</span></div></div>
+  <div><h1>Every KPI owned, evidenced and approved.</h1><p class="mt">One place for SCHC, SCEW and DSRW to report annual performance, and for leadership to see it clearly.</p>
+  <div class="glass mt">${gauge(s,{size:170,dark:true,sub:'SCHC score',showZones:false})}<div class="gl"><div><span>Green KPIs</span><b>${n.g}</b></div><div class="prog" style="background:rgba(255,255,255,.15)"><i class="grow" style="width:${n.g/KPIS.length*100}%;background:#34D399"></i></div><div><span>Amber KPIs</span><b>${n.a}</b></div><div class="prog" style="background:rgba(255,255,255,.15)"><i class="grow" style="width:${n.a/KPIS.length*100}%;background:#FBBF24"></i></div><div><span>Red KPIs</span><b>${n.r}</b></div><div class="prog" style="background:rgba(255,255,255,.15)"><i class="grow" style="width:${n.r/KPIS.length*100}%;background:#F87171"></i></div></div></div></div>
+  <p class="small" style="margin:0;color:#A9BCDD">Prototype for discussion. Figures are illustrative.</p></div>
+  <div class="login-r"><div><h2 style="font-size:24px">Welcome back</h2><p class="muted" style="margin:6px 0 0">Sign in with your SIU account. Multi factor sign in is required for approvers and admins.</p></div>
+  <button class="sso" data-as="director" data-go="inst">${ic('lock')}Sign in with SIU account</button>
+  <div class="or">or explore the prototype as</div>
+  <div class="roles">${Object.entries(ROLES).map(([k,r])=>`<button class="rolecard" data-as="${k}" data-go="${r.home}"><span class="avatar">${r.init}</span><span class="rt"><b>${r.title}</b><span>${r.desc}</span></span></button>`).join('')}</div>
+  <button class="btn ghost" data-as="provost" data-go="guide" style="align-self:flex-start">${ic('map')}See how the full flow works</button>
+  <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:14px"><span class="muted small">Data hosted in India · DPDP aligned</span><button class="tool" data-theme>${ic(isDark()?'sun':'moon')}${isDark()?'Light':'Dark'} mode</button></div></div></div>`;
+}
+const logo = () => `<div class="mark"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="12" width="4" height="9" rx="1.5" fill="#fff" opacity=".7"/><rect x="10" y="7" width="4" height="14" rx="1.5" fill="#fff"/><rect x="17" y="3" width="4" height="18" rx="1.5" fill="#fff" opacity=".85"/></svg></div>`;
+const isDark = () => { const r=document.documentElement; return r.dataset.theme ? r.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; };
+
+/* ================= Render ================= */
+function render(){
+  const shell=document.getElementById('shell');
+  document.body.classList.toggle('phone',S.phone);
+  if(S.screen==='login'||!S.role){ shell.innerHTML = loginView()+overlays(); animateCounts(); return; }
+  const R=ROLES[S.role];
+  const active = {kpi:'inst',reviewItem:'review',actionForm:'actions'}[S.screen]||S.screen;
+  const counts = {review:KPIS.filter(k=>k.status==='submitted').length, tasks:KPIS.filter(k=>k.owner==='Dr Meera Kulkarni'&&['draft','overdue','returned'].includes(k.status)).length, actions:CAS.length, approve:S.scorecardApproved?0:1};
+  const hot = {tasks:1,approve:1};
+  const navBtn = k => `<button class="${active===k?'on':''}" data-go="${k}" ${k==='entry'?'data-entry="P1.01"':''}>${ic(SCREENS[k][1])}<span>${SCREENS[k][0]}</span>${counts[k]?`<span class="count ${hot[k]?'hot':''}">${counts[k]}</span>`:''}</button>`;
+  shell.innerHTML = `<div id="app"><aside class="side" id="side"><div class="brand">${logo()}<div><b>SIU KPI Platform</b><span>Accountability · 2025/26</span></div></div>
+  <nav class="nav" aria-label="Main">${R.nav.map(([h,ks])=>`<h6>${h}</h6>${ks.map(navBtn).join('')}`).join('')}<h6>Prototype</h6>${navBtn('guide')}
+  <h6>Switch role</h6>${Object.entries(ROLES).map(([k,r])=>`<button class="${S.role===k?'on':''}" data-as="${k}" data-go="${r.home}" style="padding:6px 10px;font-size:13px"><span class="avatar" style="width:24px;height:24px;font-size:10px">${r.init}</span><span>${r.title}</span></button>`).join('')}</nav>
+  <div class="side-foot"><div class="avatar">${R.init}</div><div class="who"><b>${R.name}</b><span>${R.title} · ${R.scope}</span></div><button class="iconbtn" title="Sign out" aria-label="Sign out" data-go="login">${ic('out')}</button></div></aside>
+  <div class="drawer-scrim" data-close-side></div>
+  <div class="main"><header class="top"><button class="iconbtn menu" aria-label="Open menu" data-open-side>${ic('menu')}</button>
+  <div class="crumbs">${esc(R.scope)} / <b>${SCREENS[S.screen][0]}</b></div>
+  <div class="search">${ic('search')}<input id="gsearch" placeholder="Search KPIs, screens or people" autocomplete="off" aria-label="Search"><kbd>Ctrl K</kbd><div class="results" id="results"></div></div>
+  <select class="yearpick hide-n" aria-label="Reporting year"><option>2025/26</option><option>2024/25</option><option>2023/24</option></select>
+  <button class="tool hide-n ${S.phone?'on':''}" data-phone>${ic('phone')}${S.phone?'Desktop':'Phone'}</button>
+  <button class="iconbtn bell" aria-label="Notifications" data-bell>${ic('bell')}<span class="dot"></span></button>
+  <button class="iconbtn" aria-label="Switch light or dark mode" title="Switch light or dark mode" data-theme>${ic(isDark()?'sun':'moon')}</button></header>
+  <main class="content" id="content">${V[S.screen]()}</main></div></div>
+  ${S.phone?`<button class="tool on" data-phone style="position:fixed;top:14px;right:14px;z-index:99">${ic('phone')}Desktop view</button>`:''}
+  ${overlays()}`;
+  animateCounts();
+  if(S.screen==='entry') liveCalc();
+}
+function overlays(){
+  return `<div class="pop" id="pop"><div class="ph2"><b>Notifications</b><span class="tag">4 new</span></div>
+    <div class="item" data-as="owner" data-go="tasks">${st('returned')}<div><b>P1.05 returned to you</b><span>Denominator differs from the AWC register</span></div></div>
+    <div class="item" data-as="owner" data-go="tasks">${st('overdue')}<div><b>P1.18 is overdue</b><span>Due 30 Sep 2026, backup reminded</span></div></div>
+    <div class="item" data-as="reviewer" data-go="review">${st('submitted')}<div><b>4 submissions to review</b><span>Oldest waiting 2 days</span></div></div>
+    <div class="item" data-as="director" data-go="approve">${chip('a')}<div><b>Scorecard ready for review</b><span>SCHC 2025/26</span></div></div></div>
+  <div class="scrim" id="scrim"><div class="modal" id="modal" role="dialog" aria-modal="true"></div></div><div class="toast" id="toast"><i>✓</i><span></span></div>`;
+}
+const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+function animateCounts(root=document){
+  root.querySelectorAll('.cu').forEach(el=>{const v=parseFloat(el.dataset.v),d=+(el.dataset.d||0);if(isNaN(v))return;
+    if(reduced()){el.textContent=v.toFixed(d);return}const t0=performance.now();
+    const step=t=>{const p=Math.min(1,(t-t0)/1000),e=1-Math.pow(1-p,3);el.textContent=(v*e).toFixed(d);if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step);});
+}
+
+/* ================= Modals and toast ================= */
+const MODALS = {
+  return:()=>`<h2>Return ${S.review} to owner</h2><p class="muted">The owner sees your reason on their KPI list and must correct and resubmit.</p>
+    <div class="field"><label for="rr">Reason</label><textarea class="input" id="rr" placeholder="Say what is wrong and what to attach"></textarea><span class="hint">At least 8 characters</span></div>
+    <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn warn" id="rrBtn" data-do="return" disabled>Return to owner</button></div>`,
+  approve:()=>`<h2>Approve SCHC scorecard</h2><p class="muted">Some KPIs are still pending. Approving now records the scorecard as provisional with those items listed, and notifies the Provost.</p>
+    <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn pri" data-do="approve">Approve scorecard</button></div>`,
+  lock:()=>`<h2>Lock 2025/26</h2><p class="muted">Locking makes the year read only for everyone and moves it to the archive. Any later change needs a formal correction you approve.</p>
+    <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn pri" data-do="lock">${ic('lock')}Lock year</button></div>`,
+  change:()=>`<h2>Request a framework change</h2><div class="field mt"><label>What should change</label><select class="input"><option>Target</option><option>Formula</option><option>Allocated points</option><option>Add KPI</option><option>Retire KPI</option></select></div>
+    <div class="field"><label>Reason and supporting memo</label><textarea class="input" placeholder="Why the change is needed"></textarea></div>
+    <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn pri" data-do="toast" data-msg="Change request sent to Director">Send request</button></div>`,
+  invite:()=>`<h2>Invite user</h2><div class="field mt"><label>SIU email</label><input class="input" placeholder="name@siu.edu.in"></div>
+    <div class="grid g2"><div class="field"><label>Role</label><select class="input"><option>Data owner</option><option>Reviewer</option><option>Executive approver</option><option>Leadership</option><option>Board (read only)</option><option>Admin</option></select></div>
+    <div class="field"><label>Institute</label><select class="input"><option>SCHC</option><option>SCEW</option><option>DSRW</option><option>All institutes</option></select></div></div>
+    <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn pri" data-do="toast" data-msg="Invitation sent">Send invitation</button></div>`
+};
+function openModal(n){document.getElementById('modal').innerHTML=MODALS[n]();document.getElementById('scrim').classList.add('on');setTimeout(()=>document.querySelector('#modal textarea,#modal input')?.focus(),50);}
+function closeModal(){document.getElementById('scrim').classList.remove('on');}
+let tt;function toast(m){const t=document.getElementById('toast');t.querySelector('span').textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2600);}
+
+/* ================= Search ================= */
+function searchResults(q){
+  q=q.trim().toLowerCase(); const box=document.getElementById('results'); if(!q){box.classList.remove('on');return;}
+  const scr=Object.entries(SCREENS).filter(([k,v])=>!['kpi','reviewItem','actionForm'].includes(k)&&v[0].toLowerCase().includes(q)).slice(0,4).map(([k,v])=>`<button data-go="${k}" ${k==='entry'?'data-entry="P1.01"':''}>${ic(v[1])}<span>${v[0]}</span><small>Screen</small></button>`);
+  const ks=KPIS.filter(k=>(k.id+' '+k.name+' '+k.owner).toLowerCase().includes(q)).slice(0,6).map(k=>`<button data-go="kpi" data-kpi="${k.id}">${chip(calc(k).rag)}<span><b>${k.id}</b> ${esc(k.name)}</span><small>${esc(k.owner)}</small></button>`);
+  box.innerHTML=[...scr,...ks].join('')||`<div style="padding:14px" class="muted small">Nothing found for "${esc(q)}". Try a KPI ID such as P1.15.</div>`;box.classList.add('on');
+}
+
+/* ================= Events ================= */
+document.addEventListener('click',e=>{
+  if(e.target.closest('a'))e.preventDefault();
+  const el=e.target.closest('[data-go],[data-as],[data-bell],[data-open-side],[data-close-side],[data-phone],[data-theme],[data-close],[data-modal],[data-do],[data-addfile],[data-submit],[data-verify],[data-report],[data-tab],[data-toast],[data-pf],[data-rf],[data-caview],[data-af]');
+  if(!e.target.closest('.search'))document.getElementById('results')?.classList.remove('on');
+  if(!el){ if(!e.target.closest('#pop'))document.getElementById('pop')?.classList.remove('on'); if(e.target.id==='scrim')closeModal(); return; }
+  const d=el.dataset;
+  if(d.bell!==undefined){document.getElementById('pop').classList.toggle('on');return;}
+  document.getElementById('pop')?.classList.remove('on');
+  if(d.openSide!==undefined){document.getElementById('side').classList.add('open');return;}
+  if(d.closeSide!==undefined){document.getElementById('side').classList.remove('open');return;}
+  if(d.phone!==undefined){S.phone=!S.phone;render();return;}
+  if(d.theme!==undefined){const dark=!isDark();document.documentElement.dataset.theme=dark?'dark':'light';try{localStorage.setItem('siu-theme',dark?'dark':'light')}catch(_){}render();return;}
+  if(d.close!==undefined){closeModal();return;}
+  if(d.modal){openModal(d.modal);return;}
+  if(d.do){
+    if(d.do==='return'){const k=K(S.review);k.status='returned';k.returnReason=document.getElementById('rr').value;closeModal();S.screen='review';render();toast(`${k.id} returned to ${k.owner}`);return;}
+    if(d.do==='approve'){S.scorecardApproved=true;closeModal();render();toast('Scorecard approved and Provost notified');return;}
+    if(d.do==='lock'){S.yearLocked=true;closeModal();render();toast('2025/26 locked and archived');return;}
+    if(d.do==='toast'){closeModal();toast(d.msg);return;}
+  }
+  if(d.addfile!==undefined){const k=K(S.entry);const f={n:`${k.id}_register_extract_${S.newFiles.length+1}.pdf`,s:'286 KB',h:hash(k.id+S.newFiles.length)};S.newFiles.push(f);
+    document.getElementById('files').insertAdjacentHTML('beforeend',`<div class="file"><div class="fi">PDF</div><div class="meta"><b>${f.n}</b><span>${f.s} · SHA 256 ${f.h}…</span></div><span class="chip k-g">Hashed</span></div>`);document.getElementById('subErr').textContent='';toast('Evidence uploaded and hashed');return;}
+  if(d.submit!==undefined){const k=K(S.entry);const a=liveCalc();const err=document.getElementById('subErr');
+    if(a==null){err.textContent='Enter the annual figures before submitting.';return;}
+    if(k.files.length+S.newFiles.length===0){err.textContent='Add at least one evidence file before submitting.';return;}
+    k.actual=Math.round(a*10)/10;const n=document.getElementById('num');if(n){k.num=n.value;k.den=document.getElementById('den').value;}
+    k.files=[...k.files,...S.newFiles];S.newFiles=[];k.status='submitted';S.review=k.id;S.screen='tasks';render();toast(`${k.id} submitted to Dr Arvind Rao for review`);return;}
+  if(d.verify!==undefined){const k=K(S.review);k.status='approved';S.screen='review';render();toast(`${k.id} verified and sent to Director`);return;}
+  if(d.report){S.report=d.report;render();return;}
+  if(d.tab){S.adminTab=d.tab;render();return;}
+  if(d.caview){S.caView=d.caview;render();return;}
+  if(d.af){S.auditF=d.af;render();return;}
+  if(d.toast && !d.go){toast(d.toast);return;}
+  if(d.pf){S.pf=d.pf;if(!d.go){render();document.getElementById('kpiTable')?.scrollIntoView({block:'start'});return;}}
+  if(d.rf){S.rf=d.rf;render();document.getElementById('kpiTable')?.scrollIntoView({block:'start'});return;}
+  if(d.as){S.role=d.as;}
+  if(d.go){
+    if(d.kpi)S.kpi=d.kpi; if(d.entry){S.entry=d.entry;S.newFiles=[];} if(d.review)S.review=d.review; if(d.inst)S.inst=d.inst; if(d.ca)S.actionFor=d.ca;
+    if(d.go!==S.screen&&!d.pf){S.pf='all';S.rf='all';S.q='';}
+    if(d.go==='inst'&&S.role&&!['provost','board'].includes(S.role))S.inst='SCHC';
+    if(d.go==='login'){S.role=null;}
+    const prev=S.screen; S.screen=d.go; render();
+    const c=document.getElementById('content'); if(c){ if(d.pf&&d.go==='inst'&&prev==='inst') document.getElementById('kpiTable')?.scrollIntoView({block:'start'}); else c.scrollTo({top:0}); }
+    if(d.toast)toast(d.toast);
+  }
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.id==='gsearch'){searchResults(t.value);return;}
+  if(['num','den','act'].includes(t.id)) liveCalc();
+  if(t.id==='rr') document.getElementById('rrBtn').disabled=t.value.trim().length<8;
+  if(t.dataset.chk!==undefined){const all=[...document.querySelectorAll('[data-chk]')];const n=all.filter(c=>c.checked).length;document.getElementById('chkProg').textContent=`${n} of ${all.length}`;document.getElementById('verifyBtn').disabled=n!==all.length;}
+  if(t.dataset.w){S.weights[t.dataset.w]=t.value;const tot=Object.values(S.weights).reduce((s,v)=>s+(+v||0),0);const el=document.getElementById('wtot');el.textContent=tot;el.style.color=tot===100?'var(--g)':'var(--r)';
+    document.getElementById('wscore').textContent=f1(schcScore());document.getElementById('wSend').disabled=tot!==100;document.getElementById('wpie').innerHTML=pie(PARAMS.map(p=>({l:p.id+' '+p.short,v:+S.weights[p.id]||0,c:p.c})),{size:210});}
+  if(t.dataset.rag){S.rag[t.dataset.rag]=+t.value;document.getElementById(t.dataset.rag+'v').textContent=t.value;document.getElementById('ragPrev').innerHTML=ragDonut(KPIS,150);animateCounts(document.getElementById('ragPrev'));}
+  if(t.dataset.q!==undefined){S.q=t.value;const ks=KPIS.filter(k=>(S.pf==='all'||k.p===S.pf)&&(S.rf==='all'||calc(k).rag===S.rf)&&(!S.q||(k.id+k.name+k.owner).toLowerCase().includes(S.q.toLowerCase())));document.getElementById('kpiBody').innerHTML=ks.map(kpiRow).join('')||`<tr><td colspan="8" class="muted">Nothing matches "${esc(S.q)}".</td></tr>`;}
+  if(t.dataset.mq!==undefined){S.q=t.value;document.getElementById('masterBody').innerHTML=masterRows();}
+  if(t.dataset.uq!==undefined){S.q=t.value;document.getElementById('userBody').innerHTML=userRows();}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeModal();document.getElementById('results')?.classList.remove('on');document.getElementById('side')?.classList.remove('open');}
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){const g=document.getElementById('gsearch');if(g){e.preventDefault();g.focus();}}
+  if(e.key==='Enter'&&e.target.id==='gsearch'){document.querySelector('#results button')?.click();}
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-addfile]')){e.preventDefault();e.target.click();}
+});
+const tip=document.getElementById('tip');
+document.addEventListener('mouseover',e=>{const t=e.target.closest('[data-tip]');if(!t){tip.classList.remove('on');return}tip.textContent=t.dataset.tip;tip.classList.add('on');});
+document.addEventListener('mousemove',e=>{if(!tip.classList.contains('on'))return;const x=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8),y=e.clientY+16+tip.offsetHeight>innerHeight?e.clientY-tip.offsetHeight-10:e.clientY+16;tip.style.left=x+'px';tip.style.top=y+'px';});
+try{const t=localStorage.getItem('siu-theme');if(t)document.documentElement.dataset.theme=t;}catch(_){}
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(!document.documentElement.dataset.theme)render();});
+render();
+</script>
+</body>
+</html>
